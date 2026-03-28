@@ -1,17 +1,30 @@
 package com.moneyboard.View;
 
+import com.moneyboard.API.UtenteAPI;
+import com.moneyboard.Model.LoginRequest;
+import com.moneyboard.Model.Utente;
+import com.moneyboard.Model.UserSession;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class LogInArea extends JFrame {
 
-    private JLabel mailLabel, passwordLabel;
+    private JLabel mailLabel;
+    private JLabel passwordLabel;
     private JTextField txtMail;
     private JPasswordField txtPassword;
-    private JButton entraBtn, registratiBtn;
-    private JPanel mainPanel, formPanel, buttonPanel;
+    private JButton entraBtn;
+    private JButton registratiBtn;
+    private JPanel mainPanel;
+    private JPanel formPanel;
+    private JPanel buttonPanel;
+
+    private final UtenteAPI utenteAPI;
 
     public LogInArea() {
+        this.utenteAPI = new UtenteAPI();
+
         setTitle("MoneyBoard2.0 - Login Utente");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 750);
@@ -19,31 +32,26 @@ public class LogInArea extends JFrame {
         setResizable(false);
         setUndecorated(false);
 
-        __initComponent();
+        initComponent();
 
         setVisible(true);
     }
 
-    private void __initComponent() {
-
-        // Pannello principale
+    private void initComponent() {
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setLayout(new BorderLayout());
 
-        // Titolo
         JLabel title = new JLabel("Accedi al tuo account", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 26));
         title.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
         mainPanel.add(title, BorderLayout.NORTH);
 
-        // Pannello form
         formPanel = new JPanel();
         formPanel.setBackground(Color.WHITE);
         formPanel.setLayout(new GridLayout(4, 1, 10, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
 
-        // Label e campi
         mailLabel = new JLabel("E-mail:");
         mailLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
@@ -58,7 +66,7 @@ public class LogInArea extends JFrame {
 
         txtMail.setPreferredSize(new Dimension(300, 35));
         txtPassword.setPreferredSize(new Dimension(300, 35));
-        
+
         formPanel.add(mailLabel);
         formPanel.add(txtMail);
         formPanel.add(passwordLabel);
@@ -66,7 +74,6 @@ public class LogInArea extends JFrame {
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Pannello pulsanti
         buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
@@ -77,13 +84,13 @@ public class LogInArea extends JFrame {
         entraBtn.setBackground(new Color(0, 153, 76));
         entraBtn.setForeground(Color.WHITE);
         entraBtn.addActionListener(e -> actionButtonLogIn());
-        
+
         registratiBtn = new JButton("Registrati");
         registratiBtn.setFont(new Font("Arial", Font.BOLD, 18));
         registratiBtn.setBackground(new Color(51, 102, 255));
         registratiBtn.setForeground(Color.WHITE);
         registratiBtn.addActionListener(e -> actionButtonRegistrati());
-        
+
         buttonPanel.add(entraBtn);
         buttonPanel.add(registratiBtn);
 
@@ -91,18 +98,64 @@ public class LogInArea extends JFrame {
 
         add(mainPanel);
     }
-    
-    private void actionButtonLogIn()
-    {
-    	//da implementare controller
-    	new SezioniArea(); 
-    	dispose();
-    	
+
+    private void actionButtonLogIn() {
+        String email = txtMail.getText().trim();
+        String password = new String(txtPassword.getPassword());
+
+        if (email.isBlank() || password.isBlank()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Inserisci email e password.",
+                    "Campi mancanti",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        setButtonsEnabled(false);
+
+        new Thread(() -> executeLogin(email, password)).start();
     }
-    
-    private void actionButtonRegistrati()
-    {
-    	new RegistrazioneArea(); 
-    	dispose(); 
+
+    private void executeLogin(String email, String password) {
+        try {
+            LoginRequest request = new LoginRequest(email, password);
+            Utente utente = utenteAPI.login(request);
+
+            UserSession.getInstance().setUtente(utente);
+
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Login effettuato con successo.",
+                        "Successo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+                new SezioniArea();
+                dispose();
+            });
+
+        } catch (Exception ex) {
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(
+                    this,
+                    "Email o password errati.\n" + ex.getMessage(),
+                    "Errore login",
+                    JOptionPane.ERROR_MESSAGE
+            ));
+        } finally {
+            SwingUtilities.invokeLater(() -> setButtonsEnabled(true));
+        }
+    }
+
+    private void setButtonsEnabled(boolean enabled) {
+        entraBtn.setEnabled(enabled);
+        registratiBtn.setEnabled(enabled);
+    }
+
+    private void actionButtonRegistrati() {
+        new RegistrazioneArea();
+        dispose();
     }
 }
