@@ -57,7 +57,41 @@ public class RegistrazioneArea extends JFrame {
         usernameLabel = new JLabel("Username:");
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
-        txtUsername = new JTextField();
+        __CreateForm();
+
+        __CreateButtonArea();
+
+        add(mainPanel);
+    }
+
+	private void __CreateButtonArea() 
+	{
+		buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 150, 50, 150));
+
+        registraBtn = new JButton("Registrati");
+        registraBtn.setFont(new Font("Arial", Font.BOLD, 18));
+        registraBtn.setBackground(new Color(0, 153, 76));
+        registraBtn.setForeground(Color.WHITE);
+        registraBtn.addActionListener(e -> actionButtonRegistrati());
+
+        tornaLoginBtn = new JButton("Torna al login");
+        tornaLoginBtn.setFont(new Font("Arial", Font.BOLD, 18));
+        tornaLoginBtn.setBackground(new Color(51, 102, 255));
+        tornaLoginBtn.setForeground(Color.WHITE);
+        tornaLoginBtn.addActionListener(e -> actionButtonTornaLogin());
+
+        buttonPanel.add(registraBtn);
+        buttonPanel.add(tornaLoginBtn);
+
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+	}
+
+	private void __CreateForm() 
+	{
+		txtUsername = new JTextField();
         txtUsername.setFont(new Font("Arial", Font.PLAIN, 16));
 
         mailLabel = new JLabel("E-mail:");
@@ -80,31 +114,7 @@ public class RegistrazioneArea extends JFrame {
         formPanel.add(txtPassword);
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
-
-        buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 150, 50, 150));
-
-        registraBtn = new JButton("Registrati");
-        registraBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        registraBtn.setBackground(new Color(0, 153, 76));
-        registraBtn.setForeground(Color.WHITE);
-        registraBtn.addActionListener(e -> actionButtonRegistrati());
-
-        tornaLoginBtn = new JButton("Torna al login");
-        tornaLoginBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        tornaLoginBtn.setBackground(new Color(51, 102, 255));
-        tornaLoginBtn.setForeground(Color.WHITE);
-        tornaLoginBtn.addActionListener(e -> actionButtonTornaLogin());
-
-        buttonPanel.add(registraBtn);
-        buttonPanel.add(tornaLoginBtn);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        add(mainPanel);
-    }
+	}
 
     private void actionButtonRegistrati() {
         String username = txtUsername.getText().trim();

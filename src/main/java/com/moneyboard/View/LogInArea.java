@@ -32,12 +32,12 @@ public class LogInArea extends JFrame {
         setResizable(false);
         setUndecorated(false);
 
-        initComponent();
+        __initComponent();
 
         setVisible(true);
     }
 
-    private void initComponent() {
+    private void __initComponent() {
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setLayout(new BorderLayout());
@@ -47,7 +47,39 @@ public class LogInArea extends JFrame {
         title.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
         mainPanel.add(title, BorderLayout.NORTH);
 
-        formPanel = new JPanel();
+        __CreateForm();
+
+        __CreateButtonPanel();
+
+        add(mainPanel);
+    }
+
+	private void __CreateButtonPanel() {
+		buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 150, 50, 150));
+
+        entraBtn = new JButton("Entra");
+        entraBtn.setFont(new Font("Arial", Font.BOLD, 18));
+        entraBtn.setBackground(new Color(0, 153, 76));
+        entraBtn.setForeground(Color.WHITE);
+        entraBtn.addActionListener(e -> actionButtonLogIn());
+
+        registratiBtn = new JButton("Registrati");
+        registratiBtn.setFont(new Font("Arial", Font.BOLD, 18));
+        registratiBtn.setBackground(new Color(51, 102, 255));
+        registratiBtn.setForeground(Color.WHITE);
+        registratiBtn.addActionListener(e -> actionButtonRegistrati());
+
+        buttonPanel.add(entraBtn);
+        buttonPanel.add(registratiBtn);
+
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+	}
+
+	private void __CreateForm() {
+		formPanel = new JPanel();
         formPanel.setBackground(Color.WHITE);
         formPanel.setLayout(new GridLayout(4, 1, 10, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
@@ -73,31 +105,7 @@ public class LogInArea extends JFrame {
         formPanel.add(txtPassword);
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
-
-        buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 150, 50, 150));
-
-        entraBtn = new JButton("Entra");
-        entraBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        entraBtn.setBackground(new Color(0, 153, 76));
-        entraBtn.setForeground(Color.WHITE);
-        entraBtn.addActionListener(e -> actionButtonLogIn());
-
-        registratiBtn = new JButton("Registrati");
-        registratiBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        registratiBtn.setBackground(new Color(51, 102, 255));
-        registratiBtn.setForeground(Color.WHITE);
-        registratiBtn.addActionListener(e -> actionButtonRegistrati());
-
-        buttonPanel.add(entraBtn);
-        buttonPanel.add(registratiBtn);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        add(mainPanel);
-    }
+	}
 
     private void actionButtonLogIn() {
         String email = txtMail.getText().trim();
