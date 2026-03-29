@@ -1,5 +1,11 @@
 package com.moneyboard.View;
 
+import com.moneyboard.API.TransazioneAPI;
+import com.moneyboard.Model.CreateTransactionRequest;
+import com.moneyboard.Model.SezioneRisparmio;
+import com.moneyboard.Model.UserSession;
+import com.moneyboard.Model.Utente;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
@@ -13,7 +19,13 @@ public class AddTransazioneArea extends JFrame {
     private JButton aggiungiBtn, annullaBtn;
     private JPanel mainPanel, formPanel, buttonPanel;
 
-    public AddTransazioneArea() {
+    private final SezioneRisparmio sezioneSelezionata;
+    private final TransazioneAPI transazioneAPI;
+
+    public AddTransazioneArea(SezioneRisparmio sezioneSelezionata) {
+        this.sezioneSelezionata = sezioneSelezionata;
+        this.transazioneAPI = new TransazioneAPI();
+
         setTitle("MoneyBoard2.0 - Aggiungi Transazione");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(550, 600);
@@ -27,22 +39,21 @@ public class AddTransazioneArea extends JFrame {
 
     private void __initComponent() {
 
-        // Pannello principale
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
 
-        // Titolo
-        titleLabel = new JLabel("Aggiungi una nuova transazione", SwingConstants.CENTER);
+        titleLabel = new JLabel(
+                "Aggiungi una nuova transazione - " + sezioneSelezionata.getNome(),
+                SwingConstants.CENTER
+        );
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Form
         formPanel = new JPanel(new GridLayout(10, 1, 10, 10));
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 60, 20, 60));
 
-        // Titolo
         titoloLabel = new JLabel("Titolo:");
         titoloLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
@@ -50,7 +61,6 @@ public class AddTransazioneArea extends JFrame {
         txtTitolo.setFont(new Font("Arial", Font.PLAIN, 16));
         txtTitolo.setPreferredSize(new Dimension(300, 35));
 
-        // Descrizione
         descrizioneLabel = new JLabel("Descrizione:");
         descrizioneLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
@@ -60,7 +70,6 @@ public class AddTransazioneArea extends JFrame {
         txtDescrizione.setWrapStyleWord(true);
         JScrollPane descrizioneScroll = new JScrollPane(txtDescrizione);
 
-        // Importo
         importoLabel = new JLabel("Importo:");
         importoLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
@@ -68,7 +77,6 @@ public class AddTransazioneArea extends JFrame {
         txtImporto.setFont(new Font("Arial", Font.PLAIN, 16));
         txtImporto.setPreferredSize(new Dimension(300, 35));
 
-        // Flag entrata
         entrataLabel = new JLabel("È un'entrata?");
         entrataLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
@@ -76,7 +84,6 @@ public class AddTransazioneArea extends JFrame {
         entrataCheck.setBackground(Color.WHITE);
         entrataCheck.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        // Data (default oggi)
         dataLabel = new JLabel("Data:");
         dataLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
@@ -84,7 +91,6 @@ public class AddTransazioneArea extends JFrame {
         txtData.setFont(new Font("Arial", Font.PLAIN, 16));
         txtData.setEditable(false);
 
-        // Aggiunta componenti al form
         formPanel.add(titoloLabel);
         formPanel.add(txtTitolo);
         formPanel.add(descrizioneLabel);
@@ -98,21 +104,21 @@ public class AddTransazioneArea extends JFrame {
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Pulsanti
         buttonPanel = new JPanel(new GridLayout(1, 2, 20, 10));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 60, 40, 60));
 
         aggiungiBtn = new JButton("Aggiungi");
         aggiungiBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        aggiungiBtn.setBackground(new Color(40, 167, 69)); // verde
+        aggiungiBtn.setBackground(new Color(40, 167, 69));
         aggiungiBtn.setForeground(Color.WHITE);
-        aggiungiBtn.setEnabled(false); // disattivato finché non selezioni una sezione
+        aggiungiBtn.addActionListener(e -> actionAggiungi());
 
         annullaBtn = new JButton("Annulla");
         annullaBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        annullaBtn.setBackground(new Color(220, 53, 69)); // rosso
+        annullaBtn.setBackground(new Color(220, 53, 69));
         annullaBtn.setForeground(Color.WHITE);
+        annullaBtn.addActionListener(e -> actionAnnulla());
 
         buttonPanel.add(aggiungiBtn);
         buttonPanel.add(annullaBtn);
@@ -122,8 +128,150 @@ public class AddTransazioneArea extends JFrame {
         add(mainPanel);
     }
 
-    // Metodo per attivare il pulsante dall'esterno (controller)
-    public void enableAggiungiButton() {
-        aggiungiBtn.setEnabled(true);
+    private void actionAggiungi() {
+        String titolo = txtTitolo.getText().trim();
+        String descrizione = txtDescrizione.getText().trim();
+        String importoText = txtImporto.getText().trim();
+        String dataText = txtData.getText().trim();
+        boolean isEntrata = entrataCheck.isSelected();
+
+        if (titolo.isBlank() || importoText.isBlank() || dataText.isBlank()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Compila tutti i campi obbligatori.",
+                    "Campi mancanti",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        Double importo;
+        LocalDate data;
+
+        try {
+            importo = Double.parseDouble(importoText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "L'importo deve essere un numero valido.",
+                    "Valore non valido",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        if (importo <= 0) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "L'importo deve essere maggiore di zero.",
+                    "Valore non valido",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        try {
+            data = LocalDate.parse(dataText);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "La data non è valida.",
+                    "Data non valida",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        Utente utenteLoggato = UserSession.getInstance().getUtente();
+
+        if (utenteLoggato == null || utenteLoggato.getId() == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Utente non loggato.",
+                    "Errore sessione",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            new LogInArea();
+            dispose();
+            return;
+        }
+
+        if (sezioneSelezionata == null || sezioneSelezionata.getId() == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Sezione non valida.",
+                    "Errore sezione",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            new SezioniArea();
+            dispose();
+            return;
+        }
+
+        setButtonsEnabled(false);
+
+        new Thread(() -> executeCreateTransazione(
+                titolo,
+                descrizione,
+                importo,
+                data.toString(),
+                isEntrata,
+                utenteLoggato,
+                sezioneSelezionata
+        )).start();
+    }
+
+    private void executeCreateTransazione(String titolo,
+                                          String descrizione,
+                                          Double importo,
+                                          String data,
+                                          boolean isEntrata,
+                                          Utente utente,
+                                          SezioneRisparmio sezione) {
+        try {
+            CreateTransactionRequest request = new CreateTransactionRequest(
+                    titolo,
+                    descrizione,
+                    data,
+                    importo,
+                    isEntrata,
+                    utente,
+                    sezione
+            );
+
+            transazioneAPI.create(request);
+
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Transazione aggiunta con successo.",
+                        "Successo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+                new TransazioniArea(sezioneSelezionata);
+                dispose();
+            });
+
+        } catch (Exception ex) {
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(
+                    this,
+                    "Errore durante l'aggiunta della transazione.\n" + ex.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE
+            ));
+        } finally {
+            SwingUtilities.invokeLater(() -> setButtonsEnabled(true));
+        }
+    }
+
+    private void actionAnnulla() {
+        new SezioniArea();
+        dispose();
+    }
+
+    private void setButtonsEnabled(boolean enabled) {
+        aggiungiBtn.setEnabled(enabled);
+        annullaBtn.setEnabled(enabled);
     }
 }

@@ -5,7 +5,7 @@ public class CreateTransactionRequest {
     private String descrizione;
     private String data;
     private Double importo;
-    private boolean isEntrata;
+    private boolean entrata;    
     private Utente utente;
     private SezioneRisparmio sezione;
 
@@ -13,13 +13,13 @@ public class CreateTransactionRequest {
     }
 
     public CreateTransactionRequest(String titolo, String descrizione, String data,
-                                    Double importo, boolean isEntrata,
+                                    Double importo, boolean entrata,
                                     Utente utente, SezioneRisparmio sezione) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.data = data;
         this.importo = importo;
-        this.isEntrata = isEntrata;
+        this.entrata = entrata;
         this.utente = utente;
         this.sezione = sezione;
     }
@@ -57,11 +57,11 @@ public class CreateTransactionRequest {
     }
 
     public boolean isEntrata() {
-        return isEntrata;
+        return entrata;
     }
 
-    public void setEntrata(boolean isEntrata) {
-        this.isEntrata = isEntrata;
+    public void setEntrata(boolean entrata) {
+        this.entrata = entrata;
     }
 
     public Utente getUtente() {

@@ -20,6 +20,7 @@ public class SezioniArea extends JFrame {
     private JButton logoutBtn, modificaBtn, aggiungiTransBtn, eliminaBtn, vediTransBtn, creaSezioneBtn;
 
     private final SezioneAPI sezioneAPI;
+    private SezioneRisparmio[] sezioniCorrenti;
 
     public SezioniArea() {
         this.sezioneAPI = new SezioneAPI();
@@ -100,10 +101,7 @@ public class SezioniArea extends JFrame {
         aggiungiTransBtn.setFont(new Font("Arial", Font.BOLD, 16));
         aggiungiTransBtn.setBackground(new Color(40, 167, 69));
         aggiungiTransBtn.setForeground(Color.WHITE);
-        aggiungiTransBtn.addActionListener(e -> {
-            new AddTransazioneArea();
-            dispose();
-        });
+        aggiungiTransBtn.addActionListener(e -> actionAggiungiTransazione());
 
         eliminaBtn = new JButton("Elimina Sezione");
         eliminaBtn.setFont(new Font("Arial", Font.BOLD, 16));
@@ -115,10 +113,7 @@ public class SezioniArea extends JFrame {
         vediTransBtn.setFont(new Font("Arial", Font.BOLD, 16));
         vediTransBtn.setBackground(new Color(255, 193, 7));
         vediTransBtn.setForeground(Color.BLACK);
-        vediTransBtn.addActionListener(e -> {
-            new TransazioniArea();
-            dispose();
-        });
+        vediTransBtn.addActionListener(e -> actionVediTransazioni());
 
         creaSezioneBtn = new JButton("Crea Sezione");
         creaSezioneBtn.setFont(new Font("Arial", Font.BOLD, 16));
@@ -180,6 +175,7 @@ public class SezioniArea extends JFrame {
     }
 
     private void updateTable(SezioneRisparmio[] sezioni) {
+        this.sezioniCorrenti = sezioni;
         tableModel.setRowCount(0);
 
         if (sezioni == null || sezioni.length == 0) {
@@ -193,6 +189,42 @@ public class SezioniArea extends JFrame {
             };
             tableModel.addRow(row);
         }
+    }
+
+    private void actionAggiungiTransazione() {
+        int selectedRow = sezioniTable.getSelectedRow();
+
+        if (selectedRow == -1 || sezioniCorrenti == null || selectedRow >= sezioniCorrenti.length) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Seleziona una sezione.",
+                    "Nessuna selezione",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        SezioneRisparmio sezioneSelezionata = sezioniCorrenti[selectedRow];
+        new AddTransazioneArea(sezioneSelezionata);
+        dispose();
+    }
+
+    private void actionVediTransazioni() {
+        int selectedRow = sezioniTable.getSelectedRow();
+
+        if (selectedRow == -1 || sezioniCorrenti == null || selectedRow >= sezioniCorrenti.length) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Seleziona una sezione.",
+                    "Nessuna selezione",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        SezioneRisparmio sezioneSelezionata = sezioniCorrenti[selectedRow];
+        new TransazioniArea(sezioneSelezionata);
+        dispose();
     }
 
     private void actionEliminaSezione() {
