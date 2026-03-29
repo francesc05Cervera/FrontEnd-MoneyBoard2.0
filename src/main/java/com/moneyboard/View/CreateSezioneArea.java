@@ -161,7 +161,7 @@ public class CreateSezioneArea extends JFrame {
                         JOptionPane.INFORMATION_MESSAGE
                 );
 
-                new SezioniArea();
+                
                 dispose();
             });
 
@@ -178,7 +178,6 @@ public class CreateSezioneArea extends JFrame {
     }
 
     private void actionAnnulla() {
-        new SezioniArea();
         dispose();
     }
 

@@ -17,7 +17,7 @@ public class SezioniArea extends JFrame {
     private JTable sezioniTable;
     private DefaultTableModel tableModel;
     private JPanel mainPanel, tablePanel, buttonPanel;
-    private JButton logoutBtn, modificaBtn, aggiungiTransBtn, eliminaBtn, vediTransBtn, creaSezioneBtn;
+    private JButton logoutBtn, refreshBtn, aggiungiTransBtn, eliminaBtn, vediTransBtn, creaSezioneBtn;
 
     private final SezioneAPI sezioneAPI;
     private SezioneRisparmio[] sezioniCorrenti;
@@ -92,11 +92,11 @@ public class SezioniArea extends JFrame {
         logoutBtn.setForeground(Color.WHITE);
         logoutBtn.addActionListener(e -> actionLogout());
 
-        modificaBtn = new JButton("Modifica Sezione");
-        modificaBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        modificaBtn.setBackground(new Color(0, 102, 204));
-        modificaBtn.setForeground(Color.WHITE);
-
+        refreshBtn = new JButton("Aggiorna Tabella");
+        refreshBtn.setFont(new Font("Arial", Font.BOLD, 16));
+        refreshBtn.setBackground(new Color(0, 102, 204));
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.addActionListener(e -> actionRefreshBtn());
         aggiungiTransBtn = new JButton("Aggiungi Transazione");
         aggiungiTransBtn.setFont(new Font("Arial", Font.BOLD, 16));
         aggiungiTransBtn.setBackground(new Color(40, 167, 69));
@@ -121,11 +121,10 @@ public class SezioniArea extends JFrame {
         creaSezioneBtn.setForeground(Color.WHITE);
         creaSezioneBtn.addActionListener(e -> {
             new CreateSezioneArea();
-            dispose();
         });
 
         buttonPanel.add(logoutBtn);
-        // buttonPanel.add(modificaBtn);
+        buttonPanel.add(refreshBtn);
         buttonPanel.add(aggiungiTransBtn);
         buttonPanel.add(eliminaBtn);
         buttonPanel.add(vediTransBtn);
@@ -134,6 +133,11 @@ public class SezioniArea extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+    }
+    
+    private void actionRefreshBtn()
+    {
+    	loadSezioni();
     }
 
     private void loadSezioni() {
@@ -185,7 +189,7 @@ public class SezioniArea extends JFrame {
         for (SezioneRisparmio sezione : sezioni) {
             Object[] row = {
                     sezione.getNome(),
-                    sezione.getSaldo()
+                    sezione.getSaldo() + " €"
             };
             tableModel.addRow(row);
         }
@@ -206,7 +210,7 @@ public class SezioniArea extends JFrame {
 
         SezioneRisparmio sezioneSelezionata = sezioniCorrenti[selectedRow];
         new AddTransazioneArea(sezioneSelezionata);
-        dispose();
+        
     }
 
     private void actionVediTransazioni() {
@@ -224,7 +228,7 @@ public class SezioniArea extends JFrame {
 
         SezioneRisparmio sezioneSelezionata = sezioniCorrenti[selectedRow];
         new TransazioniArea(sezioneSelezionata);
-        dispose();
+        
     }
 
     private void actionEliminaSezione() {

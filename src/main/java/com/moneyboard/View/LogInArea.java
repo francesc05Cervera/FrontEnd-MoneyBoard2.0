@@ -42,7 +42,7 @@ public class LogInArea extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setLayout(new BorderLayout());
 
-        JLabel title = new JLabel("Accedi al tuo account", SwingConstants.CENTER);
+        JLabel title = new JLabel("Benvenuto! Effettua il login per iniziare", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 26));
         title.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
         mainPanel.add(title, BorderLayout.NORTH);
@@ -66,7 +66,7 @@ public class LogInArea extends JFrame {
         entraBtn.setForeground(Color.WHITE);
         entraBtn.addActionListener(e -> actionButtonLogIn());
 
-        registratiBtn = new JButton("Registrati");
+        registratiBtn = new JButton("Sei nuovo? Registrati qui");
         registratiBtn.setFont(new Font("Arial", Font.BOLD, 18));
         registratiBtn.setBackground(new Color(51, 102, 255));
         registratiBtn.setForeground(Color.WHITE);
@@ -79,32 +79,46 @@ public class LogInArea extends JFrame {
 	}
 
 	private void __CreateForm() {
-		formPanel = new JPanel();
-        formPanel.setBackground(Color.WHITE);
-        formPanel.setLayout(new GridLayout(4, 1, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
+	    formPanel = new JPanel();
+	    formPanel.setBackground(Color.WHITE);
+	    formPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
+	    formPanel.setLayout(new GridBagLayout());
 
-        mailLabel = new JLabel("E-mail:");
-        mailLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.insets = new Insets(10, 10, 10, 10);
+	    gbc.anchor = GridBagConstraints.WEST;
 
-        txtMail = new JTextField();
-        txtMail.setFont(new Font("Arial", Font.PLAIN, 16));
+	    // LABEL EMAIL
+	    mailLabel = new JLabel("E-mail:");
+	    mailLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+	    gbc.gridx = 0;
+	    gbc.gridy = 0;
+	    formPanel.add(mailLabel, gbc);
 
-        passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+	    // TEXTFIELD EMAIL
+	    txtMail = new JTextField();
+	    txtMail.setFont(new Font("Arial", Font.PLAIN, 16));
+	    txtMail.setPreferredSize(new Dimension(220, 30)); // più stretto
+	    gbc.gridx = 1;
+	    gbc.gridy = 0;
+	    formPanel.add(txtMail, gbc);
 
-        txtPassword = new JPasswordField();
-        txtPassword.setFont(new Font("Arial", Font.PLAIN, 16));
+	    // LABEL PASSWORD
+	    passwordLabel = new JLabel("Password:");
+	    passwordLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+	    gbc.gridx = 0;
+	    gbc.gridy = 1;
+	    formPanel.add(passwordLabel, gbc);
 
-        txtMail.setPreferredSize(new Dimension(300, 35));
-        txtPassword.setPreferredSize(new Dimension(300, 35));
+	    // TEXTFIELD PASSWORD
+	    txtPassword = new JPasswordField();
+	    txtPassword.setFont(new Font("Arial", Font.PLAIN, 16));
+	    txtPassword.setPreferredSize(new Dimension(220, 30)); // più stretto
+	    gbc.gridx = 1;
+	    gbc.gridy = 1;
+	    formPanel.add(txtPassword, gbc);
 
-        formPanel.add(mailLabel);
-        formPanel.add(txtMail);
-        formPanel.add(passwordLabel);
-        formPanel.add(txtPassword);
-
-        mainPanel.add(formPanel, BorderLayout.CENTER);
+	    mainPanel.add(formPanel, BorderLayout.CENTER);
 	}
 
     private void actionButtonLogIn() {

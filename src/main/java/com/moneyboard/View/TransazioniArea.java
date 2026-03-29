@@ -59,18 +59,32 @@ public class TransazioniArea extends JFrame {
 
         transTable = new JTable(tableModel);
         transTable.setFont(new Font("Arial", Font.PLAIN, 16));
-        transTable.setRowHeight(28);
+        transTable.setRowHeight(32);
         transTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        transTable.setOpaque(false);
-        ((DefaultTableCellRenderer) transTable.getDefaultRenderer(Object.class)).setOpaque(false);
+        // --- Stile tabella come nella GUI dell'immagine ---
+        transTable.setShowGrid(false);
+        transTable.setIntercellSpacing(new Dimension(0, 0));
 
         JTableHeader header = transTable.getTableHeader();
-        header.setOpaque(false);
-        header.setBackground(new Color(255, 255, 255, 0));
-        header.setForeground(Color.BLACK);
         header.setFont(new Font("Arial", Font.BOLD, 16));
+        header.setOpaque(false);
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setOpaque(false);
+
+        // Larghezze colonne
+        transTable.getColumnModel().getColumn(0).setPreferredWidth(150); // Titolo
+        transTable.getColumnModel().getColumn(1).setPreferredWidth(250); // Descrizione
+        transTable.getColumnModel().getColumn(2).setPreferredWidth(80);  // Importo
+        transTable.getColumnModel().getColumn(3).setPreferredWidth(120); // Data
+        transTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Tipo
+
+        header.setReorderingAllowed(false);
+        header.setResizingAllowed(false);
+
+        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
+        cellRenderer.setOpaque(false);
+        cellRenderer.setFont(new Font("Arial", Font.PLAIN, 16));
+        transTable.setDefaultRenderer(Object.class, cellRenderer);
 
         JScrollPane scrollPane = new JScrollPane(transTable);
         scrollPane.setOpaque(false);
@@ -230,7 +244,6 @@ public class TransazioniArea extends JFrame {
     }
 
     private void actionIndietro() {
-        new SezioniArea();
         dispose();
     }
 

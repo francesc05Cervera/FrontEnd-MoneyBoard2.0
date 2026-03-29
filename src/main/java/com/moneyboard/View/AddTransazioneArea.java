@@ -266,7 +266,6 @@ public class AddTransazioneArea extends JFrame {
     }
 
     private void actionAnnulla() {
-        new SezioniArea();
         dispose();
     }
 
