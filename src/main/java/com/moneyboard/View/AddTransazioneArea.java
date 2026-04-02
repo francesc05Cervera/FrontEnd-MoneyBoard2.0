@@ -112,8 +112,6 @@ public class AddTransazioneArea extends JFrame {
         aggiungiBtn.addActionListener(e -> actionAggiungi());
 
         annullaBtn = Style.newStyledButton("Annulla", Color.WHITE, new Color(220,53,69), 18);
-
-        annullaBtn = new JButton("Annulla");
         annullaBtn.addActionListener(e -> actionAnnulla());
 
         buttonPanel.add(aggiungiBtn);
