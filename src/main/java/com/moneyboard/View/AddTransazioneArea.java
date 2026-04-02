@@ -5,7 +5,7 @@ import com.moneyboard.Model.CreateTransactionRequest;
 import com.moneyboard.Model.SezioneRisparmio;
 import com.moneyboard.Model.UserSession;
 import com.moneyboard.Model.Utente;
-
+import com.moneyboard.Style.Style;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
@@ -108,16 +108,12 @@ public class AddTransazioneArea extends JFrame {
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 60, 40, 60));
 
-        aggiungiBtn = new JButton("Aggiungi");
-        aggiungiBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        aggiungiBtn.setBackground(new Color(40, 167, 69));
-        aggiungiBtn.setForeground(Color.WHITE);
+        aggiungiBtn = Style.newStyledButton("Aggiungi", Color.WHITE, new Color(40, 167, 69), 18);
         aggiungiBtn.addActionListener(e -> actionAggiungi());
 
+        annullaBtn = Style.newStyledButton("Annulla", Color.WHITE, new Color(220,53,69), 18);
+
         annullaBtn = new JButton("Annulla");
-        annullaBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        annullaBtn.setBackground(new Color(220, 53, 69));
-        annullaBtn.setForeground(Color.WHITE);
         annullaBtn.addActionListener(e -> actionAnnulla());
 
         buttonPanel.add(aggiungiBtn);
