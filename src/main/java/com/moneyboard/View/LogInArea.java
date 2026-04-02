@@ -4,6 +4,7 @@ import com.moneyboard.API.UtenteAPI;
 import com.moneyboard.Model.LoginRequest;
 import com.moneyboard.Model.Utente;
 import com.moneyboard.Model.UserSession;
+import com.moneyboard.Style.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,16 +61,10 @@ public class LogInArea extends JFrame {
         buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 150, 50, 150));
 
-        entraBtn = new JButton("Entra");
-        entraBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        entraBtn.setBackground(new Color(0, 153, 76));
-        entraBtn.setForeground(Color.WHITE);
+        entraBtn = Style.newStyledButton("Entra", Color.WHITE, new Color(0, 153, 76), 18);
         entraBtn.addActionListener(e -> actionButtonLogIn());
 
-        registratiBtn = new JButton("Sei nuovo? Registrati qui");
-        registratiBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        registratiBtn.setBackground(new Color(51, 102, 255));
-        registratiBtn.setForeground(Color.WHITE);
+        registratiBtn = Style.newStyledButton("Sei Nuovo? Registrati qui!", Color.WHITE, new Color(51, 102, 255), 18);
         registratiBtn.addActionListener(e -> actionButtonRegistrati());
 
         buttonPanel.add(entraBtn);

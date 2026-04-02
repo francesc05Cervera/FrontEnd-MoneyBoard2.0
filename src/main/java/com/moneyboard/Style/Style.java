@@ -10,6 +10,7 @@ public class Style
 	
 	public static JButton newStyledButton(String text, Color colorForeground, Color backGr)
 	{
+		
 		JButton button = new JButton(text);
 		
 		 button.setFont(new Font("Arial", Font.BOLD, 16));
@@ -19,5 +20,19 @@ public class Style
 		 
 		 return button; 
 	}
+	
+	public static JButton newStyledButton(String text, Color colorForeground, Color backGr, int dimText)
+	{
+		JButton button = new JButton(text);
+		
+		 button.setFont(new Font("Arial", Font.BOLD, dimText));
+		 button.setBackground(backGr);
+		 button.setForeground(colorForeground);
+		 
+		 
+		 return button; 
+	}
+
+	
 
 }
