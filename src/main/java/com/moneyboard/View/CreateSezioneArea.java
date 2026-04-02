@@ -4,7 +4,7 @@ import com.moneyboard.API.SezioneAPI;
 import com.moneyboard.Model.SectionCreateRequest;
 import com.moneyboard.Model.UserSession;
 import com.moneyboard.Model.Utente;
-
+import com.moneyboard.Style.Style;
 import javax.swing.*;
 import java.awt.*;
 
@@ -66,29 +66,28 @@ public class CreateSezioneArea extends JFrame {
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        buttonPanel = new JPanel(new GridLayout(1, 2, 20, 10));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 80, 40, 80));
-
-        creaBtn = new JButton("Crea");
-        creaBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        creaBtn.setBackground(new Color(40, 167, 69));
-        creaBtn.setForeground(Color.WHITE);
-        creaBtn.addActionListener(e -> actionCreaSezione());
-
-        annullaBtn = new JButton("Annulla");
-        annullaBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        annullaBtn.setBackground(new Color(220, 53, 69));
-        annullaBtn.setForeground(Color.WHITE);
-        annullaBtn.addActionListener(e -> actionAnnulla());
-
-        buttonPanel.add(creaBtn);
-        buttonPanel.add(annullaBtn);
+        __createButtonPanel();
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
     }
+
+	private void __createButtonPanel() 
+	{
+		buttonPanel = new JPanel(new GridLayout(1, 2, 20, 10));
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 80, 40, 80));
+
+        creaBtn = Style.newStyledButton("Crea", Color.WHITE, new Color(40, 167, 69), 18);
+        creaBtn.addActionListener(e -> actionCreaSezione());
+
+        annullaBtn = Style.newStyledButton("Annulla", Color.WHITE, new Color(220, 53, 69), 18);
+        annullaBtn.addActionListener(e -> actionAnnulla());
+
+        buttonPanel.add(creaBtn);
+        buttonPanel.add(annullaBtn);
+	}
 
     private void actionCreaSezione() {
         String nome = txtNome.getText().trim();
