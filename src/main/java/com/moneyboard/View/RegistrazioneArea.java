@@ -2,6 +2,7 @@ package com.moneyboard.View;
 
 import com.moneyboard.API.UtenteAPI;
 import com.moneyboard.Model.UserCreateRequest;
+import com.moneyboard.Style.Style;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,16 +72,11 @@ public class RegistrazioneArea extends JFrame {
         buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 150, 50, 150));
 
-        registraBtn = new JButton("Registrati");
-        registraBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        registraBtn.setBackground(new Color(0, 153, 76));
-        registraBtn.setForeground(Color.WHITE);
+        
+        registraBtn = Style.newStyledButton("Registrati", Color.WHITE, new Color(0, 153, 76), 18);
         registraBtn.addActionListener(e -> actionButtonRegistrati());
 
-        tornaLoginBtn = new JButton("Torna al login");
-        tornaLoginBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        tornaLoginBtn.setBackground(new Color(51, 102, 255));
-        tornaLoginBtn.setForeground(Color.WHITE);
+        tornaLoginBtn = Style.newStyledButton("Torna al Login", Color.WHITE, new Color(51, 102, 255), 18);
         tornaLoginBtn.addActionListener(e -> actionButtonTornaLogin());
 
         buttonPanel.add(registraBtn);
