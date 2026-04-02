@@ -5,7 +5,7 @@ import com.moneyboard.Model.DeleteSezioneRequest;
 import com.moneyboard.Model.SezioneRisparmio;
 import com.moneyboard.Model.UserSession;
 import com.moneyboard.Model.Utente;
-
+import com.moneyboard.Style.Style;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -86,43 +86,24 @@ public class SezioniArea extends JFrame {
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 40, 40));
 
-        logoutBtn = new JButton("Logout");
-        logoutBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        logoutBtn.setBackground(new Color(220, 53, 69));
-        logoutBtn.setForeground(Color.WHITE);
+        logoutBtn = Style.newStyledButton("Logout", Color.WHITE, new Color(220, 53, 69) );
         logoutBtn.addActionListener(e -> actionLogout());
 
-        refreshBtn = new JButton("Aggiorna Tabella");
-        refreshBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        refreshBtn.setBackground(new Color(0, 102, 204));
-        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn = Style.newStyledButton("Aggiorna Tabella", Color.WHITE, new Color(0, 102, 204));
         refreshBtn.addActionListener(e -> actionRefreshBtn());
-        aggiungiTransBtn = new JButton("Aggiungi Transazione");
-        aggiungiTransBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        aggiungiTransBtn.setBackground(new Color(40, 167, 69));
-        aggiungiTransBtn.setForeground(Color.WHITE);
+        
+        aggiungiTransBtn = Style.newStyledButton("Aggiungi Transazione", Color.WHITE, new Color(40, 167, 69));
         aggiungiTransBtn.addActionListener(e -> actionAggiungiTransazione());
 
-        eliminaBtn = new JButton("Elimina Sezione");
-        eliminaBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        eliminaBtn.setBackground(new Color(255, 140, 0));
-        eliminaBtn.setForeground(Color.WHITE);
+        eliminaBtn = Style.newStyledButton("Elimina Sezione", Color.WHITE, new Color(255, 140, 0));
         eliminaBtn.addActionListener(e -> actionEliminaSezione());
 
-        vediTransBtn = new JButton("Vedi Transazioni");
-        vediTransBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        vediTransBtn.setBackground(new Color(255, 193, 7));
-        vediTransBtn.setForeground(Color.BLACK);
+        vediTransBtn = Style.newStyledButton("Vedi Transazioni", Color.BLACK, new Color(255,193,7));
         vediTransBtn.addActionListener(e -> actionVediTransazioni());
 
-        creaSezioneBtn = new JButton("Crea Sezione");
-        creaSezioneBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        creaSezioneBtn.setBackground(new Color(138, 43, 226));
-        creaSezioneBtn.setForeground(Color.WHITE);
-        creaSezioneBtn.addActionListener(e -> {
-            new CreateSezioneArea();
-        });
-
+        creaSezioneBtn = Style.newStyledButton("Crea Sezione", Color.WHITE, new Color(138,43,226));
+        creaSezioneBtn.addActionListener(e -> actionButtonCreaSezione());
+        
         buttonPanel.add(logoutBtn);
         buttonPanel.add(refreshBtn);
         buttonPanel.add(aggiungiTransBtn);
@@ -133,6 +114,11 @@ public class SezioniArea extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+    }
+    
+    private void actionButtonCreaSezione()
+    {
+    	new CreateSezioneArea();
     }
     
     private void actionRefreshBtn()
