@@ -33,6 +33,7 @@ public class AddTransazioneArea extends JFrame {
         setResizable(false);
 
         __initComponent();
+        Style.applyTheme(this);
 
         setVisible(true);
     }
