@@ -30,7 +30,8 @@ public class AddTransazioneArea extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(550, 600);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setMinimumSize(new Dimension(620, 620));
+        setResizable(true);
 
         __initComponent();
         Style.applyTheme(this);
@@ -39,87 +40,36 @@ public class AddTransazioneArea extends JFrame {
     }
 
     private void __initComponent() {
+        mainPanel=Style.backgroundPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(30,38,28,38));
+        JPanel header=new JPanel(); header.setOpaque(false); header.setLayout(new BoxLayout(header,BoxLayout.Y_AXIS));
+        JLabel eyebrow=Style.subtitle("NUOVO MOVIMENTO  /  "+sezioneSelezionata.getNome().toUpperCase());
+        titleLabel=Style.heading("Aggiungi transazione"); titleLabel.setFont(new Font("Segoe UI",Font.BOLD,27));
+        header.add(eyebrow); header.add(Box.createVerticalStrut(6)); header.add(titleLabel);
+        mainPanel.add(header,BorderLayout.NORTH);
 
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.WHITE);
+        formPanel=Style.cardPanel(); formPanel.setLayout(new GridBagLayout());
+        GridBagConstraints g=new GridBagConstraints(); g.gridx=0;g.weightx=1;g.fill=GridBagConstraints.HORIZONTAL;g.insets=new Insets(7,10,7,10);
+        titoloLabel=Style.fieldLabel("TITOLO"); txtTitolo=new JTextField(); Style.styleField(txtTitolo);
+        descrizioneLabel=Style.fieldLabel("DESCRIZIONE"); txtDescrizione=new JTextArea(3,20); Style.styleField(txtDescrizione); txtDescrizione.setLineWrap(true);txtDescrizione.setWrapStyleWord(true);
+        JScrollPane descrizioneScroll=new JScrollPane(txtDescrizione); descrizioneScroll.setBorder(BorderFactory.createLineBorder(Style.BORDER,true)); descrizioneScroll.getViewport().setBackground(Style.SURFACE_ALT);
+        importoLabel=Style.fieldLabel("IMPORTO  (€)"); txtImporto=new JTextField(); Style.styleField(txtImporto);
+        entrataLabel=Style.fieldLabel("TIPO DI MOVIMENTO"); entrataCheck=new JCheckBox("  È un'entrata"); entrataCheck.setForeground(Style.SUCCESS);entrataCheck.setBackground(Style.SURFACE);entrataCheck.setFont(Style.REGULAR);
+        dataLabel=Style.fieldLabel("DATA"); txtData=new JTextField(LocalDate.now().toString()); Style.styleField(txtData); txtData.setEditable(false);txtData.setForeground(Style.MUTED);
+        int y=0;
+        g.gridy=y++;formPanel.add(titoloLabel,g);g.gridy=y++;formPanel.add(txtTitolo,g);
+        g.gridy=y++;formPanel.add(descrizioneLabel,g);g.gridy=y++;formPanel.add(descrizioneScroll,g);
+        g.gridy=y++;formPanel.add(importoLabel,g);g.gridy=y++;formPanel.add(txtImporto,g);
+        g.gridy=y++;formPanel.add(entrataLabel,g);g.gridy=y++;formPanel.add(entrataCheck,g);
+        g.gridy=y++;formPanel.add(dataLabel,g);g.gridy=y++;formPanel.add(txtData,g);
+        JPanel center=new JPanel(new GridBagLayout());center.setOpaque(false);
+        GridBagConstraints cg=new GridBagConstraints();cg.gridx=0;cg.gridy=0;cg.weightx=1;cg.fill=GridBagConstraints.HORIZONTAL;cg.insets=new Insets(15,0,15,0);
+        center.add(formPanel,cg);mainPanel.add(center,BorderLayout.CENTER);
 
-        titleLabel = new JLabel(
-                "Aggiungi una nuova transazione - " + sezioneSelezionata.getNome(),
-                SwingConstants.CENTER
-        );
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
-
-        formPanel = new JPanel(new GridLayout(10, 1, 10, 10));
-        formPanel.setBackground(Color.WHITE);
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 60, 20, 60));
-
-        titoloLabel = new JLabel("Titolo:");
-        titoloLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        txtTitolo = new JTextField();
-        txtTitolo.setFont(new Font("Arial", Font.PLAIN, 16));
-        txtTitolo.setPreferredSize(new Dimension(300, 35));
-
-        descrizioneLabel = new JLabel("Descrizione:");
-        descrizioneLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        txtDescrizione = new JTextArea(3, 20);
-        txtDescrizione.setFont(new Font("Arial", Font.PLAIN, 16));
-        txtDescrizione.setLineWrap(true);
-        txtDescrizione.setWrapStyleWord(true);
-        JScrollPane descrizioneScroll = new JScrollPane(txtDescrizione);
-
-        importoLabel = new JLabel("Importo:");
-        importoLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        txtImporto = new JTextField();
-        txtImporto.setFont(new Font("Arial", Font.PLAIN, 16));
-        txtImporto.setPreferredSize(new Dimension(300, 35));
-
-        entrataLabel = new JLabel("È un'entrata?");
-        entrataLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        entrataCheck = new JCheckBox("Sì");
-        entrataCheck.setBackground(Color.WHITE);
-        entrataCheck.setFont(new Font("Arial", Font.PLAIN, 16));
-
-        dataLabel = new JLabel("Data:");
-        dataLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        txtData = new JTextField(LocalDate.now().toString());
-        txtData.setFont(new Font("Arial", Font.PLAIN, 16));
-        txtData.setEditable(false);
-
-        formPanel.add(titoloLabel);
-        formPanel.add(txtTitolo);
-        formPanel.add(descrizioneLabel);
-        formPanel.add(descrizioneScroll);
-        formPanel.add(importoLabel);
-        formPanel.add(txtImporto);
-        formPanel.add(entrataLabel);
-        formPanel.add(entrataCheck);
-        formPanel.add(dataLabel);
-        formPanel.add(txtData);
-
-        mainPanel.add(formPanel, BorderLayout.CENTER);
-
-        buttonPanel = new JPanel(new GridLayout(1, 2, 20, 10));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 60, 40, 60));
-
-        aggiungiBtn = Style.newStyledButton("Aggiungi", Color.WHITE, new Color(40, 167, 69), 18);
-        aggiungiBtn.addActionListener(e -> actionAggiungi());
-
-        annullaBtn = Style.newStyledButton("Annulla", Color.WHITE, new Color(220,53,69), 18);
-        annullaBtn.addActionListener(e -> actionAnnulla());
-
-        buttonPanel.add(aggiungiBtn);
-        buttonPanel.add(annullaBtn);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
+        buttonPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,0));buttonPanel.setOpaque(false);
+        aggiungiBtn=Style.newStyledButton("Salva movimento  →",Color.WHITE,Style.SUCCESS,14);aggiungiBtn.addActionListener(e->actionAggiungi());
+        annullaBtn=Style.newStyledButton("Annulla",Color.WHITE,new Color(49,60,86),14);annullaBtn.addActionListener(e->actionAnnulla());
+        buttonPanel.add(annullaBtn);buttonPanel.add(aggiungiBtn);mainPanel.add(buttonPanel,BorderLayout.SOUTH);
         add(mainPanel);
     }
 
