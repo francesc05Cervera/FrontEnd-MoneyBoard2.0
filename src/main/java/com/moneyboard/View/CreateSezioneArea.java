@@ -24,7 +24,8 @@ public class CreateSezioneArea extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 450);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setMinimumSize(new Dimension(620, 620));
+        setResizable(true);
 
         __initComponent();
         Style.applyTheme(this);
@@ -33,44 +34,30 @@ public class CreateSezioneArea extends JFrame {
     }
 
     private void __initComponent() {
+        mainPanel=Style.backgroundPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(34,42,32,42));
+        JPanel header=new JPanel(); header.setOpaque(false); header.setLayout(new BoxLayout(header,BoxLayout.Y_AXIS));
+        JLabel eyebrow=Style.subtitle("NUOVO OBIETTIVO");
+        titleLabel=Style.heading("Crea una sezione");
+        titleLabel.setFont(new Font("Segoe UI",Font.BOLD,27));
+        header.add(eyebrow); header.add(Box.createVerticalStrut(7)); header.add(titleLabel);
+        mainPanel.add(header,BorderLayout.NORTH);
 
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.WHITE);
+        formPanel=Style.cardPanel(); formPanel.setLayout(new BoxLayout(formPanel,BoxLayout.Y_AXIS));
+        nomeLabel=Style.fieldLabel("NOME DELLA SEZIONE");
+        txtNome=new JTextField(); Style.styleField(txtNome); txtNome.setMaximumSize(new Dimension(Integer.MAX_VALUE,48));
+        obiettivoLabel=Style.fieldLabel("OBIETTIVO DI RISPARMIO  (€)");
+        txtObiettivo=new JTextField(); Style.styleField(txtObiettivo); txtObiettivo.setMaximumSize(new Dimension(Integer.MAX_VALUE,48));
+        formPanel.add(nomeLabel); formPanel.add(Box.createVerticalStrut(9)); formPanel.add(txtNome);
+        formPanel.add(Box.createVerticalStrut(24)); formPanel.add(obiettivoLabel); formPanel.add(Box.createVerticalStrut(9)); formPanel.add(txtObiettivo);
+        JPanel center=new JPanel(new GridBagLayout()); center.setOpaque(false);
+        GridBagConstraints gbc=new GridBagConstraints(); gbc.gridx=0;gbc.gridy=0;gbc.weightx=1;gbc.fill=GridBagConstraints.HORIZONTAL;gbc.insets=new Insets(25,0,25,0);
+        center.add(formPanel,gbc); mainPanel.add(center,BorderLayout.CENTER);
 
-        titleLabel = new JLabel("Crea una nuova sezione", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
-
-        formPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        formPanel.setBackground(Color.WHITE);
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 80, 20, 80));
-
-        nomeLabel = new JLabel("Nome Sezione:");
-        nomeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        txtNome = new JTextField();
-        txtNome.setFont(new Font("Arial", Font.PLAIN, 16));
-        txtNome.setPreferredSize(new Dimension(300, 35));
-
-        obiettivoLabel = new JLabel("Obiettivo (importo da raggiungere):");
-        obiettivoLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        txtObiettivo = new JTextField();
-        txtObiettivo.setFont(new Font("Arial", Font.PLAIN, 16));
-        txtObiettivo.setPreferredSize(new Dimension(300, 35));
-
-        formPanel.add(nomeLabel);
-        formPanel.add(txtNome);
-        formPanel.add(obiettivoLabel);
-        formPanel.add(txtObiettivo);
-
-        mainPanel.add(formPanel, BorderLayout.CENTER);
-
-        __createButtonPanel();
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
+        buttonPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,0)); buttonPanel.setOpaque(false);
+        creaBtn=Style.newStyledButton("Crea obiettivo  →",Color.WHITE,Style.PRIMARY,14); creaBtn.addActionListener(e->actionCreaSezione());
+        annullaBtn=Style.newStyledButton("Annulla",Color.WHITE,new Color(49,60,86),14); annullaBtn.addActionListener(e->actionAnnulla());
+        buttonPanel.add(annullaBtn); buttonPanel.add(creaBtn); mainPanel.add(buttonPanel,BorderLayout.SOUTH);
         add(mainPanel);
     }
 
