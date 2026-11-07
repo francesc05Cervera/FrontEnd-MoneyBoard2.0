@@ -1,5 +1,7 @@
 package com.moneyboard.View;
 
+import com.moneyboard.Style.Style;
+
 import com.moneyboard.API.TransazioneAPI;
 import com.moneyboard.Model.SezioneRisparmio;
 import com.moneyboard.Model.Transazione;
@@ -34,6 +36,7 @@ public class TransazioniArea extends JFrame {
         setResizable(false);
 
         __initComponent();
+        Style.applyTheme(this);
         loadTransazioni();
 
         setVisible(true);
