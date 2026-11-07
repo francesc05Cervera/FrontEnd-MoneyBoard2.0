@@ -34,6 +34,7 @@ public class LogInArea extends JFrame {
         setUndecorated(false);
 
         __initComponent();
+        Style.applyTheme(this);
 
         setVisible(true);
     }
