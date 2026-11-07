@@ -31,9 +31,10 @@ public class TransazioniArea extends JFrame {
 
         setTitle("MoneyBoard2.0 - Transazioni");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(750, 750);
+        setSize(1120, 760);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setMinimumSize(new Dimension(950, 650));
+        setResizable(true);
 
         __initComponent();
         Style.applyTheme(this);
@@ -43,91 +44,38 @@ public class TransazioniArea extends JFrame {
     }
 
     private void __initComponent() {
+        mainPanel=Style.backgroundPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(34,38,30,38));
+        JPanel top=new JPanel(new BorderLayout()); top.setOpaque(false);
+        JPanel titles=new JPanel(); titles.setOpaque(false); titles.setLayout(new BoxLayout(titles,BoxLayout.Y_AXIS));
+        JLabel eyebrow=Style.subtitle("AREA OPERATIVA  /  MOVIMENTI");
+        JLabel title=Style.heading("Transazioni");
+        JLabel sub=Style.subtitle("Movimenti registrati nella sezione: "+sezioneSelezionata.getNome());
+        titles.add(eyebrow); titles.add(Box.createVerticalStrut(6)); titles.add(title); titles.add(Box.createVerticalStrut(5)); titles.add(sub);
+        top.add(titles,BorderLayout.WEST); mainPanel.add(top,BorderLayout.NORTH);
 
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.WHITE);
+        String[] colonne={"TITOLO","DESCRIZIONE","IMPORTO","DATA","TIPO"};
+        tableModel=new DefaultTableModel(colonne,0){@Override public boolean isCellEditable(int row,int column){return false;}};
+        transTable=new JTable(tableModel); transTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Style.styleTable(transTable);
+        transTable.getColumnModel().getColumn(0).setPreferredWidth(170);
+        transTable.getColumnModel().getColumn(1).setPreferredWidth(320);
+        transTable.getColumnModel().getColumn(2).setPreferredWidth(110);
+        transTable.getColumnModel().getColumn(3).setPreferredWidth(130);
+        transTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+        JScrollPane scroll=new JScrollPane(transTable); scroll.setBorder(BorderFactory.createEmptyBorder()); scroll.getViewport().setBackground(Style.SURFACE);
+        tablePanel=Style.cardPanel(new BorderLayout()); tablePanel.add(scroll,BorderLayout.CENTER);
+        mainPanel.add(tablePanel,BorderLayout.CENTER);
 
-        JLabel title = new JLabel("Tutte le transazioni - " + sezioneSelezionata.getNome(), SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 26));
-        title.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
-        mainPanel.add(title, BorderLayout.NORTH);
-
-        String[] colonne = {"Titolo", "Descrizione", "Importo", "Data", "Tipo"};
-        tableModel = new DefaultTableModel(colonne, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        transTable = new JTable(tableModel);
-        transTable.setFont(new Font("Arial", Font.PLAIN, 16));
-        transTable.setRowHeight(32);
-        transTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        // --- Stile tabella come nella GUI dell'immagine ---
-        transTable.setShowGrid(false);
-        transTable.setIntercellSpacing(new Dimension(0, 0));
-
-        JTableHeader header = transTable.getTableHeader();
-        header.setFont(new Font("Arial", Font.BOLD, 16));
-        header.setOpaque(false);
-        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setOpaque(false);
-
-        // Larghezze colonne
-        transTable.getColumnModel().getColumn(0).setPreferredWidth(150); // Titolo
-        transTable.getColumnModel().getColumn(1).setPreferredWidth(250); // Descrizione
-        transTable.getColumnModel().getColumn(2).setPreferredWidth(80);  // Importo
-        transTable.getColumnModel().getColumn(3).setPreferredWidth(120); // Data
-        transTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Tipo
-
-        header.setReorderingAllowed(false);
-        header.setResizingAllowed(false);
-
-        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
-        cellRenderer.setOpaque(false);
-        cellRenderer.setFont(new Font("Arial", Font.PLAIN, 16));
-        transTable.setDefaultRenderer(Object.class, cellRenderer);
-
-        JScrollPane scrollPane = new JScrollPane(transTable);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-        tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBackground(Color.WHITE);
-        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 40));
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
-
-        mainPanel.add(tablePanel, BorderLayout.CENTER);
-
-        buttonPanel = new JPanel(new GridLayout(1, 2, 20, 10));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 40, 40));
-
-        eliminaBtn = new JButton("Elimina Transazione");
-        eliminaBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        eliminaBtn.setBackground(new Color(220, 53, 69));
-        eliminaBtn.setForeground(Color.WHITE);
-        eliminaBtn.setEnabled(false);
-        eliminaBtn.addActionListener(e -> actionEliminaTransazione());
-
-        indietroBtn = new JButton("Indietro");
-        indietroBtn.setFont(new Font("Arial", Font.BOLD, 18));
-        indietroBtn.setBackground(new Color(70, 70, 70));
-        indietroBtn.setForeground(Color.WHITE);
-        indietroBtn.addActionListener(e -> actionIndietro());
-
-        buttonPanel.add(eliminaBtn);
-        buttonPanel.add(indietroBtn);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
+        buttonPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,0)); buttonPanel.setOpaque(false);
+        eliminaBtn=Style.newStyledButton("Elimina movimento",Color.WHITE,Style.DANGER,13);
+        eliminaBtn.setEnabled(false); eliminaBtn.addActionListener(e->actionEliminaTransazione());
+        indietroBtn=Style.newStyledButton("←  Torna alle sezioni",Color.WHITE,new Color(49,60,86),13);
+        indietroBtn.addActionListener(e->actionIndietro());
+        buttonPanel.add(indietroBtn); buttonPanel.add(eliminaBtn);
+        mainPanel.add(buttonPanel,BorderLayout.SOUTH);
         add(mainPanel);
-
-        transTable.getSelectionModel().addListSelectionListener(e -> {
-            eliminaBtn.setEnabled(transTable.getSelectedRow() != -1);
-        });
+        transTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting()) eliminaBtn.setEnabled(transTable.getSelectedRow()!=-1);});
     }
 
     private void loadTransazioni() {
