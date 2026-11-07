@@ -5,7 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.Window;
+import javax.swing.JFrame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
@@ -79,7 +79,7 @@ public final class Style {
         UIManager.put("Viewport.background", SURFACE);
     }
 
-    public static void applyTheme(Window window) {
+    public static void applyTheme(JFrame window) {
         window.getContentPane().setBackground(BACKGROUND);
         styleTree(window);
         window.setBackground(BACKGROUND);
