@@ -36,6 +36,7 @@ public class RegistrazioneArea extends JFrame {
         setResizable(false);
 
         initComponent();
+        Style.applyTheme(this);
 
         setVisible(true);
     }
