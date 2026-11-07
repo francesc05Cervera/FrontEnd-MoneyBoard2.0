@@ -27,9 +27,10 @@ public class SezioniArea extends JFrame {
 
         setTitle("MoneyBoard2.0 - Sezioni");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 900);
+        setSize(1180, 820);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setMinimumSize(new Dimension(980, 700));
+        setResizable(true);
 
         __initComponent();
         Style.applyTheme(this);
@@ -39,84 +40,77 @@ public class SezioniArea extends JFrame {
     }
 
     private void __initComponent() {
+        mainPanel = Style.backgroundPanel();
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(new Color(14,19,32));
+        sidebar.setLayout(new BoxLayout(sidebar,BoxLayout.Y_AXIS));
+        sidebar.setBorder(BorderFactory.createEmptyBorder(28,20,24,20));
+        sidebar.setPreferredSize(new Dimension(225,0));
+        JLabel logo=new JLabel("◈  MONEYBOARD");
+        logo.setFont(new Font("Segoe UI",Font.BOLD,17)); logo.setForeground(Style.PRIMARY);
+        JLabel menu=Style.subtitle("WORKSPACE");
+        menu.setBorder(BorderFactory.createEmptyBorder(48,8,14,0));
+        JLabel active=new JLabel("   ▦   Panoramica");
+        active.setOpaque(true); active.setBackground(new Color(47,48,82)); active.setForeground(Color.WHITE);
+        active.setFont(new Font("Segoe UI",Font.BOLD,14));
+        active.setBorder(BorderFactory.createEmptyBorder(14,10,14,10));
+        active.setMaximumSize(new Dimension(Integer.MAX_VALUE,46));
+        sidebar.add(logo); sidebar.add(menu); sidebar.add(active);
+        sidebar.add(Box.createVerticalGlue());
+        JLabel footer=Style.subtitle("PERSONAL FINANCE");
+        sidebar.add(footer);
+        logoutBtn=Style.newStyledButton("Esci",Color.WHITE,new Color(75,45,63),13);
+        logoutBtn.setAlignmentX(Component.LEFT_ALIGNMENT); logoutBtn.addActionListener(e->actionLogout());
+        sidebar.add(Box.createVerticalStrut(12)); sidebar.add(logoutBtn);
+        mainPanel.add(sidebar,BorderLayout.WEST);
 
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.WHITE);
+        JPanel content=new JPanel(new BorderLayout(0,22)); content.setOpaque(false);
+        content.setBorder(BorderFactory.createEmptyBorder(34,36,30,36));
+        JPanel top=new JPanel(new BorderLayout()); top.setOpaque(false);
+        JPanel titleBox=new JPanel(); titleBox.setOpaque(false); titleBox.setLayout(new BoxLayout(titleBox,BoxLayout.Y_AXIS));
+        JLabel eyebrow=Style.subtitle("IL TUO SPAZIO FINANZIARIO  /  OVERVIEW");
+        JLabel title=Style.heading("Panoramica");
+        titleBox.add(eyebrow); titleBox.add(Box.createVerticalStrut(7)); titleBox.add(title);
+        refreshBtn=Style.newStyledButton("↻  Aggiorna",Color.WHITE,new Color(49,60,86),13);
+        refreshBtn.addActionListener(e->actionRefreshBtn());
+        top.add(titleBox,BorderLayout.WEST); top.add(refreshBtn,BorderLayout.EAST);
+        content.add(top,BorderLayout.NORTH);
 
-        JLabel title = new JLabel("Le tue sezioni", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 26));
-        title.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
-        mainPanel.add(title, BorderLayout.NORTH);
+        JPanel body=new JPanel(new BorderLayout(0,18)); body.setOpaque(false);
+        JPanel welcome=Style.cardPanel(new BorderLayout(10,5));
+        JLabel welcomeTitle=Style.heading("I tuoi obiettivi, a portata di mano");
+        welcomeTitle.setFont(new Font("Segoe UI",Font.BOLD,20));
+        JLabel welcomeSub=Style.subtitle("Seleziona una sezione per gestire le transazioni o crea un nuovo obiettivo di risparmio.");
+        welcome.add(welcomeTitle,BorderLayout.NORTH); welcome.add(welcomeSub,BorderLayout.CENTER);
+        body.add(welcome,BorderLayout.NORTH);
 
-        String[] colonne = {"Nome Sezione", "Importo"};
-        tableModel = new DefaultTableModel(colonne, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        String[] colonne={"SEZIONE","SALDO"};
+        tableModel=new DefaultTableModel(colonne,0){@Override public boolean isCellEditable(int row,int column){return false;}};
+        sezioniTable=new JTable(tableModel); sezioniTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Style.styleTable(sezioniTable);
+        JScrollPane scroll=new JScrollPane(sezioniTable); scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.getViewport().setBackground(Style.SURFACE);
+        tablePanel=Style.cardPanel(new BorderLayout(0,12));
+        JLabel tableTitle=new JLabel("Le tue sezioni di risparmio"); tableTitle.setFont(new Font("Segoe UI",Font.BOLD,17)); tableTitle.setForeground(Style.TEXT);
+        tablePanel.add(tableTitle,BorderLayout.NORTH); tablePanel.add(scroll,BorderLayout.CENTER);
+        body.add(tablePanel,BorderLayout.CENTER);
 
-        sezioniTable = new JTable(tableModel);
-        sezioniTable.setFont(new Font("Arial", Font.PLAIN, 16));
-        sezioniTable.setRowHeight(28);
-        sezioniTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        sezioniTable.setOpaque(false);
-        ((DefaultTableCellRenderer) sezioniTable.getDefaultRenderer(Object.class)).setOpaque(false);
-
-        JTableHeader header = sezioniTable.getTableHeader();
-        header.setOpaque(false);
-        header.setBackground(new Color(255, 255, 255, 0));
-        header.setForeground(Color.BLACK);
-        header.setFont(new Font("Arial", Font.BOLD, 16));
-        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setOpaque(false);
-
-        JScrollPane scrollPane = new JScrollPane(sezioniTable);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-        tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBackground(Color.WHITE);
-        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 40));
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
-
-        mainPanel.add(tablePanel, BorderLayout.CENTER);
-
-        buttonPanel = new JPanel(new GridLayout(2, 3, 10, 10));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 40, 40));
-
-        logoutBtn = Style.newStyledButton("Logout", Color.WHITE, new Color(220, 53, 69) );
-        logoutBtn.addActionListener(e -> actionLogout());
-
-        refreshBtn = Style.newStyledButton("Aggiorna Tabella", Color.WHITE, new Color(0, 102, 204));
-        refreshBtn.addActionListener(e -> actionRefreshBtn());
-        
-        aggiungiTransBtn = Style.newStyledButton("Aggiungi Transazione", Color.WHITE, new Color(40, 167, 69));
-        aggiungiTransBtn.addActionListener(e -> actionAggiungiTransazione());
-
-        eliminaBtn = Style.newStyledButton("Elimina Sezione", Color.WHITE, new Color(255, 140, 0));
-        eliminaBtn.addActionListener(e -> actionEliminaSezione());
-
-        vediTransBtn = Style.newStyledButton("Vedi Transazioni", Color.BLACK, new Color(255,193,7));
-        vediTransBtn.addActionListener(e -> actionVediTransazioni());
-
-        creaSezioneBtn = Style.newStyledButton("Crea Sezione", Color.WHITE, new Color(138,43,226));
-        creaSezioneBtn.addActionListener(e -> actionButtonCreaSezione());
-        
-        buttonPanel.add(logoutBtn);
-        buttonPanel.add(refreshBtn);
-        buttonPanel.add(aggiungiTransBtn);
-        buttonPanel.add(eliminaBtn);
-        buttonPanel.add(vediTransBtn);
-        buttonPanel.add(creaSezioneBtn);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
+        buttonPanel=new JPanel(new FlowLayout(FlowLayout.LEFT,10,0)); buttonPanel.setOpaque(false);
+        creaSezioneBtn=Style.newStyledButton("+  Nuova sezione",Color.WHITE,Style.PRIMARY,13);
+        creaSezioneBtn.addActionListener(e->actionButtonCreaSezione());
+        aggiungiTransBtn=Style.newStyledButton("+  Transazione",Color.WHITE,Style.SUCCESS,13);
+        aggiungiTransBtn.addActionListener(e->actionAggiungiTransazione());
+        vediTransBtn=Style.newStyledButton("↗  Movimenti",Color.WHITE,new Color(49,60,86),13);
+        vediTransBtn.addActionListener(e->actionVediTransazioni());
+        eliminaBtn=Style.newStyledButton("Elimina sezione",Color.WHITE,Style.DANGER,13);
+        eliminaBtn.addActionListener(e->actionEliminaSezione());
+        buttonPanel.add(creaSezioneBtn); buttonPanel.add(aggiungiTransBtn); buttonPanel.add(vediTransBtn); buttonPanel.add(eliminaBtn);
+        body.add(buttonPanel,BorderLayout.SOUTH);
+        content.add(body,BorderLayout.CENTER);
+        mainPanel.add(content,BorderLayout.CENTER);
         add(mainPanel);
     }
-    
+
     private void actionButtonCreaSezione()
     {
     	new CreateSezioneArea();
