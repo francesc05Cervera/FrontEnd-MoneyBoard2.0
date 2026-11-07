@@ -32,6 +32,7 @@ public class SezioniArea extends JFrame {
         setResizable(false);
 
         __initComponent();
+        Style.applyTheme(this);
         loadSezioni();
 
         setVisible(true);
