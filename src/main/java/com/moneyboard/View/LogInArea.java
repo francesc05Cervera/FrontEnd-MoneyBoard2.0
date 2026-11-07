@@ -28,9 +28,10 @@ public class LogInArea extends JFrame {
 
         setTitle("MoneyBoard2.0 - Login Utente");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 750);
+        setSize(1040, 700);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setMinimumSize(new Dimension(900, 620));
+        setResizable(true);
         setUndecorated(false);
 
         __initComponent();
@@ -40,82 +41,84 @@ public class LogInArea extends JFrame {
     }
 
     private void __initComponent() {
-        mainPanel = new JPanel();
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setLayout(new BorderLayout());
+        mainPanel = Style.backgroundPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(34, 54, 34, 54));
 
-        JLabel title = new JLabel("Benvenuto! Effettua il login per iniziare", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 26));
-        title.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
-        mainPanel.add(title, BorderLayout.NORTH);
+        JPanel brand = new JPanel();
+        brand.setOpaque(false);
+        brand.setLayout(new BoxLayout(brand, BoxLayout.Y_AXIS));
+        JLabel logo = new JLabel("◈  MONEYBOARD");
+        logo.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        logo.setForeground(Style.PRIMARY);
+        JLabel headline = Style.heading("<html>Il controllo del tuo denaro,<br>in una nuova prospettiva.</html>");
+        headline.setFont(new Font("Segoe UI", Font.BOLD, 34));
+        JLabel description = Style.subtitle("<html>Organizza i tuoi obiettivi, monitora le spese<br>e costruisci il tuo futuro finanziario.</html>");
+        description.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        brand.add(logo);
+        brand.add(Box.createVerticalStrut(72));
+        brand.add(headline);
+        brand.add(Box.createVerticalStrut(18));
+        brand.add(description);
+        brand.add(Box.createVerticalStrut(36));
+        JLabel features = new JLabel("<html><font color='#30C48D'>●</font>  Obiettivi sempre sotto controllo<br><br><font color='#7C6CFF'>●</font>  Entrate e uscite in un unico posto<br><br><font color='#F5B54C'>●</font>  Una visione più chiara dei tuoi risparmi</html>");
+        features.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        features.setForeground(Style.MUTED);
+        brand.add(features);
 
-        __CreateForm();
-
-        __CreateButtonPanel();
-
-        add(mainPanel);
-    }
-
-	private void __CreateButtonPanel() {
-		buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 150, 50, 150));
-
-        entraBtn = Style.newStyledButton("Entra", Color.WHITE, new Color(0, 153, 76), 18);
+        JPanel formCard = Style.cardPanel();
+        formCard.setLayout(new BoxLayout(formCard, BoxLayout.Y_AXIS));
+        formCard.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Style.BORDER, 1, true),
+                BorderFactory.createEmptyBorder(38, 38, 38, 38)));
+        JLabel formTitle = Style.heading("Bentornato");
+        formTitle.setFont(new Font("Segoe UI", Font.BOLD, 27));
+        JLabel formSubtitle = Style.subtitle("Accedi al tuo spazio finanziario");
+        mailLabel = Style.fieldLabel("INDIRIZZO EMAIL");
+        passwordLabel = Style.fieldLabel("PASSWORD");
+        txtMail = new JTextField();
+        txtPassword = new JPasswordField();
+        Style.styleField(txtMail);
+        Style.styleField(txtPassword);
+        txtMail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 48));
+        txtPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 48));
+        entraBtn = Style.newStyledButton("Accedi al tuo account  →", Color.WHITE, Style.PRIMARY, 15);
+        entraBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
         entraBtn.addActionListener(e -> actionButtonLogIn());
-
-        registratiBtn = Style.newStyledButton("Sei Nuovo? Registrati qui!", Color.WHITE, new Color(51, 102, 255), 18);
+        registratiBtn = Style.newStyledButton("Crea un account", Color.WHITE, new Color(49, 60, 86), 14);
+        registratiBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
         registratiBtn.addActionListener(e -> actionButtonRegistrati());
 
-        buttonPanel.add(entraBtn);
-        buttonPanel.add(registratiBtn);
+        formCard.add(formTitle);
+        formCard.add(Box.createVerticalStrut(8));
+        formCard.add(formSubtitle);
+        formCard.add(Box.createVerticalStrut(38));
+        formCard.add(mailLabel);
+        formCard.add(Box.createVerticalStrut(9));
+        formCard.add(txtMail);
+        formCard.add(Box.createVerticalStrut(22));
+        formCard.add(passwordLabel);
+        formCard.add(Box.createVerticalStrut(9));
+        formCard.add(txtPassword);
+        formCard.add(Box.createVerticalStrut(30));
+        formCard.add(entraBtn);
+        formCard.add(Box.createVerticalStrut(12));
+        formCard.add(registratiBtn);
 
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-	}
-
-	private void __CreateForm() {
-	    formPanel = new JPanel();
-	    formPanel.setBackground(Color.WHITE);
-	    formPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
-	    formPanel.setLayout(new GridBagLayout());
-
-	    GridBagConstraints gbc = new GridBagConstraints();
-	    gbc.insets = new Insets(10, 10, 10, 10);
-	    gbc.anchor = GridBagConstraints.WEST;
-
-	    // LABEL EMAIL
-	    mailLabel = new JLabel("E-mail:");
-	    mailLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-	    gbc.gridx = 0;
-	    gbc.gridy = 0;
-	    formPanel.add(mailLabel, gbc);
-
-	    // TEXTFIELD EMAIL
-	    txtMail = new JTextField();
-	    txtMail.setFont(new Font("Arial", Font.PLAIN, 16));
-	    txtMail.setPreferredSize(new Dimension(220, 30)); // più stretto
-	    gbc.gridx = 1;
-	    gbc.gridy = 0;
-	    formPanel.add(txtMail, gbc);
-
-	    // LABEL PASSWORD
-	    passwordLabel = new JLabel("Password:");
-	    passwordLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-	    gbc.gridx = 0;
-	    gbc.gridy = 1;
-	    formPanel.add(passwordLabel, gbc);
-
-	    // TEXTFIELD PASSWORD
-	    txtPassword = new JPasswordField();
-	    txtPassword.setFont(new Font("Arial", Font.PLAIN, 16));
-	    txtPassword.setPreferredSize(new Dimension(220, 30)); // più stretto
-	    gbc.gridx = 1;
-	    gbc.gridy = 1;
-	    formPanel.add(txtPassword, gbc);
-
-	    mainPanel.add(formPanel, BorderLayout.CENTER);
-	}
+        JPanel layout = new JPanel(new GridBagLayout());
+        layout.setOpaque(false);
+        GridBagConstraints left = new GridBagConstraints();
+        left.gridx=0; left.gridy=0; left.weightx=1; left.weighty=1;
+        left.fill=GridBagConstraints.BOTH; left.anchor=GridBagConstraints.CENTER;
+        left.insets=new Insets(0,0,0,55);
+        layout.add(brand,left);
+        GridBagConstraints right = new GridBagConstraints();
+        right.gridx=1; right.gridy=0; right.weightx=0.85; right.weighty=0;
+        right.fill=GridBagConstraints.HORIZONTAL; right.anchor=GridBagConstraints.CENTER;
+        right.insets=new Insets(0,15,0,0);
+        layout.add(formCard,right);
+        mainPanel.add(layout,BorderLayout.CENTER);
+        add(mainPanel);
+    }
 
     private void actionButtonLogIn() {
         String email = txtMail.getText().trim();
