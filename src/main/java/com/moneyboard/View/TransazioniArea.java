@@ -144,12 +144,12 @@ public class TransazioniArea extends JFrame {
 
         setButtonsEnabled(false);
 
-        new Thread(() -> executeLoadTransazioni(utente.getId(), sezioneSelezionata.getId())).start();
+        new Thread(() -> executeLoadTransazioni(sezioneSelezionata.getId())).start();
     }
 
-    private void executeLoadTransazioni(Long utenteId, Long sezioneId) {
+    private void executeLoadTransazioni(Long sezioneId) {
         try {
-            Transazione[] transazioni = transazioneAPI.getByUtenteIdAndSezioneId(utenteId, sezioneId);
+            Transazione[] transazioni = transazioneAPI.getBySezioneId(sezioneId);
 
             SwingUtilities.invokeLater(() -> updateTable(transazioni));
 

@@ -12,17 +12,19 @@ public class SezioneAPI {
         this.apiClient = new APIClient();
     }
 
-    public SezioneRisparmio[] getByUtenteId(Long utenteId) throws Exception {
-        String json = apiClient.get("/api/sezioni/utente/" + utenteId);
+    /** GET /api2/sezione → sezioni dell'utente autenticato (id ricavato dal token). */
+    public SezioneRisparmio[] getSezioni() throws Exception {
+        String json = apiClient.get("/sezione");
         return apiClient.getGson().fromJson(json, SezioneRisparmio[].class);
     }
 
-    public SezioneRisparmio create(SectionCreateRequest request) throws Exception {
-        String json = apiClient.post("/api/sezioni", request);
-        return apiClient.getGson().fromJson(json, SezioneRisparmio.class);
+    /** POST /api2/sezione/create → risposta in testo semplice. */
+    public void create(SectionCreateRequest request) throws Exception {
+        apiClient.post("/sezione/create", request);
     }
 
+    /** DELETE /api2/sezione con body { "nome": "..." } → risposta in testo semplice. */
     public void delete(DeleteSezioneRequest request) throws Exception {
-        apiClient.delete("/api/sezioni", request);
+        apiClient.delete("/sezione", request);
     }
 }

@@ -1,17 +1,16 @@
 package com.moneyboard.Model;
 
+/** Body di POST /api2/sezione/create. L'utente è ricavato dal token JWT. Nota: "obbiettivo" con due b. */
 public class SectionCreateRequest {
     private String nome;
     private Double obbiettivo;
-    private Utente utente;
 
     public SectionCreateRequest() {
     }
 
-    public SectionCreateRequest(String nome, Double obbiettivo, Utente utente) {
+    public SectionCreateRequest(String nome, Double obbiettivo) {
         this.nome = nome;
         this.obbiettivo = obbiettivo;
-        this.utente = utente;
     }
 
     public String getNome() {
@@ -28,13 +27,5 @@ public class SectionCreateRequest {
 
     public void setObbiettivo(Double obbiettivo) {
         this.obbiettivo = obbiettivo;
-    }
-
-    public Utente getUtente() {
-        return utente;
-    }
-
-    public void setUtente(Utente utente) {
-        this.utente = utente;
     }
 }

@@ -144,12 +144,12 @@ public class CreateSezioneArea extends JFrame {
         setButtonsEnabled(false);
 
         Double finalObiettivo = obiettivo;
-        new Thread(() -> executeCreateSezione(nome, finalObiettivo, utenteLoggato)).start();
+        new Thread(() -> executeCreateSezione(nome, finalObiettivo)).start();
     }
 
-    private void executeCreateSezione(String nome, Double obiettivo, Utente utenteLoggato) {
+    private void executeCreateSezione(String nome, Double obiettivo) {
         try {
-            SectionCreateRequest request = new SectionCreateRequest(nome, obiettivo, utenteLoggato);
+            SectionCreateRequest request = new SectionCreateRequest(nome, obiettivo);
             sezioneAPI.create(request);
 
             SwingUtilities.invokeLater(() -> {

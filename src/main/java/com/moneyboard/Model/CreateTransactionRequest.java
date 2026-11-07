@@ -1,82 +1,64 @@
 package com.moneyboard.Model;
 
+/**
+ * Body di POST /api2/transazione/create.
+ * Il backend legge "entrata" (non isEntrata) e "sezione.nome"; l'utente è ricavato dal token JWT.
+ */
 public class CreateTransactionRequest {
     private String titolo;
     private String descrizione;
     private String data;
     private Double importo;
-    private boolean entrata;    
-    private Utente utente;
-    private SezioneRisparmio sezione;
+    private boolean entrata;
+    private SezioneRef sezione;
+
+    /** Riferimento alla sezione tramite nome. */
+    public static class SezioneRef {
+        private String nome;
+
+        public SezioneRef(String nome) {
+            this.nome = nome;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+    }
 
     public CreateTransactionRequest() {
     }
 
     public CreateTransactionRequest(String titolo, String descrizione, String data,
-                                    Double importo, boolean entrata,
-                                    Utente utente, SezioneRisparmio sezione) {
+                                    Double importo, boolean entrata, String nomeSezione) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.data = data;
         this.importo = importo;
         this.entrata = entrata;
-        this.utente = utente;
-        this.sezione = sezione;
+        this.sezione = new SezioneRef(nomeSezione);
     }
 
     public String getTitolo() {
         return titolo;
     }
 
-    public void setTitolo(String titolo) {
-        this.titolo = titolo;
-    }
-
     public String getDescrizione() {
         return descrizione;
-    }
-
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
     }
 
     public String getData() {
         return data;
     }
 
-    public void setData(String data) {
-        this.data = data;
-    }
-
     public Double getImporto() {
         return importo;
-    }
-
-    public void setImporto(Double importo) {
-        this.importo = importo;
     }
 
     public boolean isEntrata() {
         return entrata;
     }
 
-    public void setEntrata(boolean entrata) {
-        this.entrata = entrata;
-    }
-
-    public Utente getUtente() {
-        return utente;
-    }
-
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-    }
-
-    public SezioneRisparmio getSezione() {
+    public SezioneRef getSezione() {
         return sezione;
-    }
-
-    public void setSezione(SezioneRisparmio sezione) {
-        this.sezione = sezione;
     }
 }

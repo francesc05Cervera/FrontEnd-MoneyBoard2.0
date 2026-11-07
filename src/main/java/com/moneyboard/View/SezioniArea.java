@@ -143,12 +143,12 @@ public class SezioniArea extends JFrame {
 
         setButtonsEnabled(false);
 
-        new Thread(() -> executeLoadSezioni(utente.getId())).start();
+        new Thread(this::executeLoadSezioni).start();
     }
 
-    private void executeLoadSezioni(Long utenteId) {
+    private void executeLoadSezioni() {
         try {
-            SezioneRisparmio[] sezioni = sezioneAPI.getByUtenteId(utenteId);
+            SezioneRisparmio[] sezioni = sezioneAPI.getSezioni();
 
             SwingUtilities.invokeLater(() -> updateTable(sezioni));
 

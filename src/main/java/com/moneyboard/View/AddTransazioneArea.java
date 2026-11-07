@@ -210,7 +210,6 @@ public class AddTransazioneArea extends JFrame {
                 importo,
                 data.toString(),
                 isEntrata,
-                utenteLoggato,
                 sezioneSelezionata
         )).start();
     }
@@ -220,7 +219,6 @@ public class AddTransazioneArea extends JFrame {
                                           Double importo,
                                           String data,
                                           boolean isEntrata,
-                                          Utente utente,
                                           SezioneRisparmio sezione) {
         try {
             CreateTransactionRequest request = new CreateTransactionRequest(
@@ -229,8 +227,7 @@ public class AddTransazioneArea extends JFrame {
                     data,
                     importo,
                     isEntrata,
-                    utente,
-                    sezione
+                    sezione.getNome()
             );
 
             transazioneAPI.create(request);

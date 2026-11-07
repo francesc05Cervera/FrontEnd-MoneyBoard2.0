@@ -1,16 +1,15 @@
 package com.moneyboard.Model;
 
-import com.moneyboard.Model.Utente;
-
 public class UserSession {
 
     private static UserSession instance;
     private Utente utente;
+    private volatile String token;
 
     private UserSession() {
     }
 
-    public static UserSession getInstance() {
+    public static synchronized UserSession getInstance() {
         if (instance == null) {
             instance = new UserSession();
         }
@@ -25,11 +24,21 @@ public class UserSession {
         this.utente = utente;
     }
 
+    /** Token JWT della sessione, letto da APIClient a ogni richiesta. */
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public boolean isLoggedIn() {
-        return utente != null && utente.getId() != null;
+        return utente != null && utente.getId() != null && token != null;
     }
 
     public void clear() {
         utente = null;
+        token = null;
     }
 }
