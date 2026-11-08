@@ -57,23 +57,21 @@ public class SezioniArea extends JFrame {
         top.add(topActions,BorderLayout.EAST);
         content.add(top,BorderLayout.NORTH);
 
-        JPanel body=new JPanel(new BorderLayout(0,18)); body.setOpaque(false);
-        JPanel welcome=Style.cardPanel(new BorderLayout(10,5));
-        JLabel welcomeTitle=Style.heading("I tuoi obiettivi, a portata di mano");
-        welcomeTitle.setFont(new Font("Segoe UI",Font.BOLD,20));
-        JLabel welcomeSub=Style.subtitle("Seleziona una sezione per gestire le transazioni o crea un nuovo obiettivo di risparmio.");
-        welcome.add(welcomeTitle,BorderLayout.NORTH); welcome.add(welcomeSub,BorderLayout.CENTER);
-        body.add(welcome,BorderLayout.NORTH);
+        JPanel body=new JPanel(new BorderLayout(0,14)); body.setOpaque(false);
 
-        cardsContainer = Style.cardPanel(new BorderLayout(0, 16));
+        cardsContainer = Style.cardPanel(new BorderLayout(0, 20));
+        cardsContainer.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Style.BORDER, 1, true),
+                BorderFactory.createEmptyBorder(28, 30, 26, 30)));
         JPanel cardsHeader = new JPanel(new BorderLayout());
         cardsHeader.setOpaque(false);
         JPanel cardsHeading = new JPanel();
         cardsHeading.setOpaque(false);
         cardsHeading.setLayout(new BoxLayout(cardsHeading, BoxLayout.Y_AXIS));
         JLabel cardsTitle = Style.heading("Le tue sezioni");
-        cardsTitle.setFont(new Font("Segoe UI", Font.BOLD, 19));
+        cardsTitle.setFont(new Font("Segoe UI", Font.BOLD, 25));
         JLabel cardsHint = Style.subtitle("Seleziona una card per gestire il tuo obiettivo");
+        cardsHint.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cardsHeading.add(cardsTitle);
         cardsHeading.add(Box.createVerticalStrut(5));
         cardsHeading.add(cardsHint);
@@ -81,7 +79,7 @@ public class SezioniArea extends JFrame {
         cardsContainer.add(cardsHeader, BorderLayout.NORTH);
         cardsPanel = new JPanel(new GridLayout(0, 3, 16, 16));
         cardsPanel.setOpaque(false);
-        cardsPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 8, 2));
+        cardsPanel.setBorder(BorderFactory.createEmptyBorder(8, 2, 12, 2));
         JScrollPane cardsScroll = new JScrollPane(cardsPanel);
         cardsScroll.setBorder(BorderFactory.createEmptyBorder());
         cardsScroll.setOpaque(false);
@@ -183,7 +181,7 @@ public class SezioniArea extends JFrame {
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Style.BORDER, 1, true),
                 BorderFactory.createEmptyBorder(20, 20, 18, 20)));
-        card.setPreferredSize(new Dimension(220, 165));
+        card.setPreferredSize(new Dimension(220, 190));
         card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         JPanel topLine = new JPanel(new BorderLayout());
         topLine.setOpaque(false);
