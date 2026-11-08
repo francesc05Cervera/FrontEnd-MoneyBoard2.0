@@ -54,7 +54,7 @@ public class CreateSezioneArea extends JFrame {
         GridBagConstraints gbc=new GridBagConstraints(); gbc.gridx=0;gbc.gridy=0;gbc.weightx=1;gbc.fill=GridBagConstraints.HORIZONTAL;gbc.insets=new Insets(25,0,25,0);
         center.add(formPanel,gbc); mainPanel.add(center,BorderLayout.CENTER);
 
-        buttonPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,0)); buttonPanel.setOpaque(false);
+        buttonPanel=new JPanel(new GridLayout(1,2,12,0)); buttonPanel.setOpaque(false);
         creaBtn=Style.newStyledButton("Crea obiettivo  →",Color.WHITE,Style.PRIMARY,14); creaBtn.addActionListener(e->actionCreaSezione());
         annullaBtn=Style.newStyledButton("Annulla",Color.WHITE,new Color(49,60,86),14); annullaBtn.addActionListener(e->actionAnnulla());
         buttonPanel.add(annullaBtn); buttonPanel.add(creaBtn); mainPanel.add(buttonPanel,BorderLayout.SOUTH);
