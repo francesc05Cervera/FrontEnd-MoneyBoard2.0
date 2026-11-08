@@ -11,7 +11,7 @@ import android.content.Context;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         getWindow().setStatusBarColor(BG);
         getWindow().setNavigationBarColor(BG);
         getWindow().getDecorView().setSystemUiVisibility(0);
@@ -272,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             if(value<=0){toast("L'importo deve essere maggiore di zero.");return;}
             JsonObject section=new JsonObject();section.addProperty("nome",string(selectedSection,"nome",""));
             JsonObject body=new JsonObject();body.addProperty("titolo",t);body.addProperty("descrizione",d);
-            body.addProperty("data",java.time.LocalDate.now().toString());body.addProperty("importo",value);
+            body.addProperty("data",new java.text.SimpleDateFormat("yyyy-MM-dd",Locale.ITALY).format(new java.util.Date()));body.addProperty("importo",value);
             body.addProperty("entrata",incoming.isChecked());body.add("sezione",section);
             save.setEnabled(false);runApi(()->{api.request("POST","/transazione/create",body,session.token());runOnUiThread(this::loadTransactions);},()->save.setEnabled(true));
         });
