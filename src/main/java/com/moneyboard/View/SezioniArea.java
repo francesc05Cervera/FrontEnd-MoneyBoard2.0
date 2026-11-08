@@ -47,7 +47,7 @@ public class SezioniArea extends JFrame {
         sidebar.setBorder(BorderFactory.createEmptyBorder(28,20,24,20));
         sidebar.setPreferredSize(new Dimension(225,0));
         JLabel logo=new JLabel("💰  MONEYBOARD");
-        logo.setFont(new Font("Segoe UI",Font.BOLD,17)); logo.setForeground(Style.PRIMARY);
+        logo.setFont(new Font("Segoe UI Emoji",Font.PLAIN,19)); logo.setForeground(Style.PRIMARY);
         JLabel menu=Style.subtitle("WORKSPACE");
         menu.setBorder(BorderFactory.createEmptyBorder(48,8,14,0));
         JLabel active=new JLabel("   📊   Panoramica");
