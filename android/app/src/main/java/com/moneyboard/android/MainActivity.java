@@ -288,25 +288,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private LinearLayout card() {
-        MaterialCardView shell=new MaterialCardView(this);
-        shell.setCardBackgroundColor(SURFACE);
-        shell.setStrokeColor(BORDER);
-        shell.setStrokeWidth(dp(1));
-        shell.setRadius(dp(18));
-        shell.setCardElevation(dp(1));
-        LinearLayout inner=new LinearLayout(this);
-        inner.setOrientation(LinearLayout.VERTICAL);
-        inner.setPadding(dp(18),dp(18),dp(18),dp(18));
-        shell.addView(inner);
-        // Restituisce la card stessa: il contenuto interno non viene mai riutilizzato
-        // come figlio di un secondo parent (errore "already has a parent").
-        LinearLayout wrapper=new LinearLayout(this);
-        wrapper.setOrientation(LinearLayout.VERTICAL);
-        wrapper.addView(shell,new LinearLayout.LayoutParams(-1,-2));
+        LinearLayout panel=new LinearLayout(this);
+        panel.setOrientation(LinearLayout.VERTICAL);
+        panel.setPadding(dp(18),dp(18),dp(18),dp(18));
+        android.graphics.drawable.GradientDrawable background=new android.graphics.drawable.GradientDrawable();
+        background.setColor(SURFACE);
+        background.setCornerRadius(dp(18));
+        background.setStroke(dp(1),BORDER);
+        panel.setBackground(background);
+        panel.setElevation(dp(1));
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);
         lp.bottomMargin=dp(14);
-        wrapper.setLayoutParams(lp);
-        return wrapper;
+        panel.setLayoutParams(lp);
+        return panel;
     }
 
     private TextInputLayout input(String hint,TextInputEditText edit) {
