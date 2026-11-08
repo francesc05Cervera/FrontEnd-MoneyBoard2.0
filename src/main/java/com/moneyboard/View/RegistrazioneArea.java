@@ -48,8 +48,8 @@ public class RegistrazioneArea extends JFrame {
         JPanel brand = new JPanel();
         brand.setOpaque(false);
         brand.setLayout(new BoxLayout(brand,BoxLayout.Y_AXIS));
-        JLabel logo = new JLabel("◈  MONEYBOARD");
-        logo.setFont(new Font("Segoe UI",Font.BOLD,18));
+        JLabel logo = new JLabel("💰  MONEYBOARD");
+        logo.setFont(new Font("Segoe UI Emoji",Font.PLAIN,20));
         logo.setForeground(Style.PRIMARY);
         JLabel headline = Style.heading("<html>Inizia a costruire<br>il tuo futuro.</html>");
         headline.setFont(new Font("Segoe UI",Font.BOLD,34));
@@ -76,9 +76,11 @@ public class RegistrazioneArea extends JFrame {
         txtPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE,46));
         registraBtn=Style.newStyledButton("Crea account  →",Color.WHITE,Style.PRIMARY,15);
         registraBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        registraBtn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         registraBtn.addActionListener(e->actionButtonRegistrati());
         tornaLoginBtn=Style.newStyledButton("Ho già un account",Color.WHITE,new Color(49,60,86),14);
         tornaLoginBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        tornaLoginBtn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         tornaLoginBtn.addActionListener(e->actionButtonTornaLogin());
         card.add(title); card.add(Box.createVerticalStrut(7)); card.add(sub);
         card.add(Box.createVerticalStrut(24)); card.add(usernameLabel); card.add(Box.createVerticalStrut(7)); card.add(txtUsername);
