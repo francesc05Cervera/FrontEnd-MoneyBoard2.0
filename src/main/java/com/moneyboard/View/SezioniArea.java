@@ -7,16 +7,12 @@ import com.moneyboard.Model.UserSession;
 import com.moneyboard.Model.Utente;
 import com.moneyboard.Style.Style;
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class SezioniArea extends JFrame {
 
-    private JTable sezioniTable;
-    private DefaultTableModel tableModel;
-    private JPanel mainPanel, tablePanel, buttonPanel;
+    private JPanel mainPanel, cardsPanel, cardsContainer, buttonPanel;
+    private int selectedSezioneIndex = -1;
     private JButton logoutBtn, refreshBtn, aggiungiTransBtn, eliminaBtn, vediTransBtn, creaSezioneBtn;
 
     private final SezioneAPI sezioneAPI;
@@ -84,16 +80,31 @@ public class SezioniArea extends JFrame {
         welcome.add(welcomeTitle,BorderLayout.NORTH); welcome.add(welcomeSub,BorderLayout.CENTER);
         body.add(welcome,BorderLayout.NORTH);
 
-        String[] colonne={"SEZIONE","SALDO"};
-        tableModel=new DefaultTableModel(colonne,0){@Override public boolean isCellEditable(int row,int column){return false;}};
-        sezioniTable=new JTable(tableModel); sezioniTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        Style.styleTable(sezioniTable);
-        JScrollPane scroll=new JScrollPane(sezioniTable); scroll.setBorder(BorderFactory.createEmptyBorder());
-        scroll.getViewport().setBackground(Style.SURFACE);
-        tablePanel=Style.cardPanel(new BorderLayout(0,12));
-        JLabel tableTitle=new JLabel("Le tue sezioni di risparmio"); tableTitle.setFont(new Font("Segoe UI",Font.BOLD,17)); tableTitle.setForeground(Style.TEXT);
-        tablePanel.add(tableTitle,BorderLayout.NORTH); tablePanel.add(scroll,BorderLayout.CENTER);
-        body.add(tablePanel,BorderLayout.CENTER);
+        cardsContainer = Style.cardPanel(new BorderLayout(0, 16));
+        JPanel cardsHeader = new JPanel(new BorderLayout());
+        cardsHeader.setOpaque(false);
+        JPanel cardsHeading = new JPanel();
+        cardsHeading.setOpaque(false);
+        cardsHeading.setLayout(new BoxLayout(cardsHeading, BoxLayout.Y_AXIS));
+        JLabel cardsTitle = Style.heading("Le tue sezioni");
+        cardsTitle.setFont(new Font("Segoe UI", Font.BOLD, 19));
+        JLabel cardsHint = Style.subtitle("Seleziona una card per gestire il tuo obiettivo");
+        cardsHeading.add(cardsTitle);
+        cardsHeading.add(Box.createVerticalStrut(5));
+        cardsHeading.add(cardsHint);
+        cardsHeader.add(cardsHeading, BorderLayout.WEST);
+        cardsContainer.add(cardsHeader, BorderLayout.NORTH);
+        cardsPanel = new JPanel(new GridLayout(0, 3, 16, 16));
+        cardsPanel.setOpaque(false);
+        cardsPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 8, 2));
+        JScrollPane cardsScroll = new JScrollPane(cardsPanel);
+        cardsScroll.setBorder(BorderFactory.createEmptyBorder());
+        cardsScroll.setOpaque(false);
+        cardsScroll.getViewport().setOpaque(false);
+        cardsScroll.getVerticalScrollBar().setUnitIncrement(18);
+        cardsScroll.getVerticalScrollBar().setPreferredSize(new Dimension(9, 0));
+        cardsContainer.add(cardsScroll, BorderLayout.CENTER);
+        body.add(cardsContainer, BorderLayout.CENTER);
 
         buttonPanel=new JPanel(new GridLayout(1,4,10,0)); buttonPanel.setOpaque(false);
         creaSezioneBtn=Style.newStyledButton("➕  Nuova sezione",Color.WHITE,Style.PRIMARY,13);
@@ -161,23 +172,119 @@ public class SezioniArea extends JFrame {
 
     private void updateTable(SezioneRisparmio[] sezioni) {
         this.sezioniCorrenti = sezioni;
-        tableModel.setRowCount(0);
-
+        selectedSezioneIndex = -1;
+        cardsPanel.removeAll();
         if (sezioni == null || sezioni.length == 0) {
-            return;
+            cardsPanel.setLayout(new BorderLayout());
+            JLabel empty = new JLabel("<html><div style='text-align:center;'>"
+                    + "<span style='font-size:22px;'>Nessuna sezione ancora</span><br><br>"
+                    + "Crea il tuo primo obiettivo di risparmio per iniziare."
+                    + "</div></html>", SwingConstants.CENTER);
+            empty.setForeground(Style.MUTED);
+            empty.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+            cardsPanel.add(empty, BorderLayout.CENTER);
+        } else {
+            cardsPanel.setLayout(new GridLayout(0, 3, 16, 16));
+            for (int i = 0; i < sezioni.length; i++) cardsPanel.add(createSezioneCard(sezioni[i], i));
         }
+        cardsPanel.revalidate();
+        cardsPanel.repaint();
+        updateSelectionButtons();
+    }
 
-        for (SezioneRisparmio sezione : sezioni) {
-            Object[] row = {
-                    sezione.getNome(),
-                    sezione.getSaldo() + " €"
-            };
-            tableModel.addRow(row);
+    private JPanel createSezioneCard(SezioneRisparmio sezione, int index) {
+        JPanel card = new JPanel(new BorderLayout(0, 16));
+        card.setBackground(Style.SURFACE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Style.BORDER, 1, true),
+                BorderFactory.createEmptyBorder(20, 20, 18, 20)));
+        card.setPreferredSize(new Dimension(220, 165));
+        card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        JPanel topLine = new JPanel(new BorderLayout());
+        topLine.setOpaque(false);
+        JLabel symbol = new JLabel("€", SwingConstants.CENTER);
+        symbol.setOpaque(true);
+        symbol.setBackground(new Color(53, 48, 103));
+        symbol.setForeground(new Color(177, 164, 255));
+        symbol.setFont(new Font("Segoe UI", Font.BOLD, 19));
+        symbol.setPreferredSize(new Dimension(42, 42));
+        symbol.setBorder(BorderFactory.createLineBorder(new Color(82, 73, 145), 1, true));
+        JLabel tag = new JLabel("OBIETTIVO");
+        tag.setFont(new Font("Segoe UI", Font.BOLD, 10));
+        tag.setForeground(Style.MUTED);
+        topLine.add(symbol, BorderLayout.WEST);
+        topLine.add(tag, BorderLayout.EAST);
+        JPanel details = new JPanel();
+        details.setOpaque(false);
+        details.setLayout(new BoxLayout(details, BoxLayout.Y_AXIS));
+        JLabel name = new JLabel(sezione.getNome());
+        name.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        name.setForeground(Style.TEXT);
+        name.setAlignmentX(Component.LEFT_ALIGNMENT);
+        name.setToolTipText(sezione.getNome());
+        JLabel caption = Style.subtitle("SALDO ATTUALE");
+        caption.setFont(new Font("Segoe UI", Font.BOLD, 10));
+        caption.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel balance = new JLabel(sezione.getSaldo() + " €");
+        balance.setFont(new Font("Segoe UI", Font.BOLD, 23));
+        balance.setForeground(Style.SUCCESS);
+        balance.setAlignmentX(Component.LEFT_ALIGNMENT);
+        details.add(name);
+        details.add(Box.createVerticalStrut(12));
+        details.add(caption);
+        details.add(Box.createVerticalStrut(4));
+        details.add(balance);
+        JLabel hint = new JLabel("Clicca per selezionare  →");
+        hint.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        hint.setForeground(Style.MUTED);
+        card.add(topLine, BorderLayout.NORTH);
+        card.add(details, BorderLayout.CENTER);
+        card.add(hint, BorderLayout.SOUTH);
+        java.awt.event.MouseAdapter selector = new java.awt.event.MouseAdapter() {
+            @Override public void mouseClicked(java.awt.event.MouseEvent e) { selectSezione(index); }
+            @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+                if (selectedSezioneIndex != index) card.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Style.PRIMARY, 1, true),
+                        BorderFactory.createEmptyBorder(20, 20, 18, 20)));
+            }
+            @Override public void mouseExited(java.awt.event.MouseEvent e) {
+                if (selectedSezioneIndex != index) card.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Style.BORDER, 1, true),
+                        BorderFactory.createEmptyBorder(20, 20, 18, 20)));
+            }
+        };
+        card.addMouseListener(selector);
+        topLine.addMouseListener(selector); symbol.addMouseListener(selector); tag.addMouseListener(selector);
+        details.addMouseListener(selector); name.addMouseListener(selector); caption.addMouseListener(selector);
+        balance.addMouseListener(selector); hint.addMouseListener(selector);
+        return card;
+    }
+
+    private void selectSezione(int index) {
+        selectedSezioneIndex = index;
+        for (int i = 0; i < cardsPanel.getComponentCount(); i++) {
+            if (cardsPanel.getComponent(i) instanceof JPanel) {
+                JPanel card = (JPanel) cardsPanel.getComponent(i);
+                card.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(i == index ? Style.PRIMARY : Style.BORDER,
+                                i == index ? 2 : 1, true),
+                        BorderFactory.createEmptyBorder(20, 20, 18, 20)));
+                card.setBackground(i == index ? new Color(25, 31, 53) : Style.SURFACE);
+            }
         }
+        updateSelectionButtons();
+    }
+
+    private void updateSelectionButtons() {
+        boolean selected = selectedSezioneIndex >= 0 && sezioniCorrenti != null
+                && selectedSezioneIndex < sezioniCorrenti.length;
+        aggiungiTransBtn.setEnabled(selected);
+        vediTransBtn.setEnabled(selected);
+        eliminaBtn.setEnabled(selected);
     }
 
     private void actionAggiungiTransazione() {
-        int selectedRow = sezioniTable.getSelectedRow();
+        int selectedRow = selectedSezioneIndex;
 
         if (selectedRow == -1 || sezioniCorrenti == null || selectedRow >= sezioniCorrenti.length) {
             JOptionPane.showMessageDialog(
@@ -195,7 +302,7 @@ public class SezioniArea extends JFrame {
     }
 
     private void actionVediTransazioni() {
-        int selectedRow = sezioniTable.getSelectedRow();
+        int selectedRow = selectedSezioneIndex;
 
         if (selectedRow == -1 || sezioniCorrenti == null || selectedRow >= sezioniCorrenti.length) {
             JOptionPane.showMessageDialog(
@@ -213,7 +320,7 @@ public class SezioniArea extends JFrame {
     }
 
     private void actionEliminaSezione() {
-        int selectedRow = sezioniTable.getSelectedRow();
+        int selectedRow = selectedSezioneIndex;
 
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(
@@ -225,7 +332,7 @@ public class SezioniArea extends JFrame {
             return;
         }
 
-        String nomeSezione = tableModel.getValueAt(selectedRow, 0).toString().trim();
+        String nomeSezione = sezioniCorrenti[selectedRow].getNome();
 
         int conferma = JOptionPane.showConfirmDialog(
                 this,
@@ -279,9 +386,12 @@ public class SezioniArea extends JFrame {
 
     private void setButtonsEnabled(boolean enabled) {
         logoutBtn.setEnabled(enabled);
-        aggiungiTransBtn.setEnabled(enabled);
-        eliminaBtn.setEnabled(enabled);
-        vediTransBtn.setEnabled(enabled);
         creaSezioneBtn.setEnabled(enabled);
+        refreshBtn.setEnabled(enabled);
+        if (!enabled) {
+            aggiungiTransBtn.setEnabled(false);
+            eliminaBtn.setEnabled(false);
+            vediTransBtn.setEnabled(false);
+        } else updateSelectionButtons();
     }
 }
