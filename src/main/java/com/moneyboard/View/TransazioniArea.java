@@ -67,7 +67,7 @@ public class TransazioniArea extends JFrame {
         tablePanel=Style.cardPanel(new BorderLayout()); tablePanel.add(scroll,BorderLayout.CENTER);
         mainPanel.add(tablePanel,BorderLayout.CENTER);
 
-        buttonPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,0)); buttonPanel.setOpaque(false);
+        buttonPanel=new JPanel(new GridLayout(1,2,12,0)); buttonPanel.setOpaque(false);
         eliminaBtn=Style.newStyledButton("Elimina movimento",Color.WHITE,Style.DANGER,13);
         eliminaBtn.setEnabled(false); eliminaBtn.addActionListener(e->actionEliminaTransazione());
         indietroBtn=Style.newStyledButton("←  Torna alle sezioni",Color.WHITE,new Color(49,60,86),13);
