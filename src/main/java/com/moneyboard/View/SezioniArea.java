@@ -46,11 +46,11 @@ public class SezioniArea extends JFrame {
         sidebar.setLayout(new BoxLayout(sidebar,BoxLayout.Y_AXIS));
         sidebar.setBorder(BorderFactory.createEmptyBorder(28,20,24,20));
         sidebar.setPreferredSize(new Dimension(225,0));
-        JLabel logo=new JLabel("◈  MONEYBOARD");
+        JLabel logo=new JLabel("💰  MONEYBOARD");
         logo.setFont(new Font("Segoe UI",Font.BOLD,17)); logo.setForeground(Style.PRIMARY);
         JLabel menu=Style.subtitle("WORKSPACE");
         menu.setBorder(BorderFactory.createEmptyBorder(48,8,14,0));
-        JLabel active=new JLabel("   ▦   Panoramica");
+        JLabel active=new JLabel("   📊   Panoramica");
         active.setOpaque(true); active.setBackground(new Color(47,48,82)); active.setForeground(Color.WHITE);
         active.setFont(new Font("Segoe UI",Font.BOLD,14));
         active.setBorder(BorderFactory.createEmptyBorder(14,10,14,10));
@@ -71,7 +71,7 @@ public class SezioniArea extends JFrame {
         JLabel eyebrow=Style.subtitle("IL TUO SPAZIO FINANZIARIO  /  OVERVIEW");
         JLabel title=Style.heading("Panoramica");
         titleBox.add(eyebrow); titleBox.add(Box.createVerticalStrut(7)); titleBox.add(title);
-        refreshBtn=Style.newStyledButton("↻  Aggiorna",Color.WHITE,new Color(49,60,86),13);
+        refreshBtn=Style.newStyledButton("🔄  Aggiorna",Color.WHITE,new Color(49,60,86),13);
         refreshBtn.addActionListener(e->actionRefreshBtn());
         top.add(titleBox,BorderLayout.WEST); top.add(refreshBtn,BorderLayout.EAST);
         content.add(top,BorderLayout.NORTH);
@@ -95,14 +95,14 @@ public class SezioniArea extends JFrame {
         tablePanel.add(tableTitle,BorderLayout.NORTH); tablePanel.add(scroll,BorderLayout.CENTER);
         body.add(tablePanel,BorderLayout.CENTER);
 
-        buttonPanel=new JPanel(new FlowLayout(FlowLayout.LEFT,10,0)); buttonPanel.setOpaque(false);
-        creaSezioneBtn=Style.newStyledButton("+  Nuova sezione",Color.WHITE,Style.PRIMARY,13);
+        buttonPanel=new JPanel(new GridLayout(1,4,10,0)); buttonPanel.setOpaque(false);
+        creaSezioneBtn=Style.newStyledButton("➕  Nuova sezione",Color.WHITE,Style.PRIMARY,13);
         creaSezioneBtn.addActionListener(e->actionButtonCreaSezione());
-        aggiungiTransBtn=Style.newStyledButton("+  Transazione",Color.WHITE,Style.SUCCESS,13);
+        aggiungiTransBtn=Style.newStyledButton("💸  Transazione",Color.WHITE,Style.SUCCESS,13);
         aggiungiTransBtn.addActionListener(e->actionAggiungiTransazione());
-        vediTransBtn=Style.newStyledButton("↗  Movimenti",Color.WHITE,new Color(49,60,86),13);
+        vediTransBtn=Style.newStyledButton("📈  Movimenti",Color.WHITE,new Color(49,60,86),13);
         vediTransBtn.addActionListener(e->actionVediTransazioni());
-        eliminaBtn=Style.newStyledButton("Elimina sezione",Color.WHITE,Style.DANGER,13);
+        eliminaBtn=Style.newStyledButton("🗑️  Elimina sezione",Color.WHITE,Style.DANGER,13);
         eliminaBtn.addActionListener(e->actionEliminaSezione());
         buttonPanel.add(creaSezioneBtn); buttonPanel.add(aggiungiTransBtn); buttonPanel.add(vediTransBtn); buttonPanel.add(eliminaBtn);
         body.add(buttonPanel,BorderLayout.SOUTH);
