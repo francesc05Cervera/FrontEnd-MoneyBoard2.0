@@ -1,6 +1,6 @@
 package com.moneyboard.View;
 
-import com.moneyboard.style.Style;
+import com.moneyboard.Style.Style;
 
 import com.moneyboard.API.TransazioneAPI;
 import com.moneyboard.Model.SezioneRisparmio;

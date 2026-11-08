@@ -4,7 +4,7 @@ import com.moneyboard.API.SezioneAPI;
 import com.moneyboard.Model.SectionCreateRequest;
 import com.moneyboard.Model.UserSession;
 import com.moneyboard.Model.Utente;
-import com.moneyboard.style.Style;
+import com.moneyboard.Style.Style;
 import javax.swing.*;
 import java.awt.*;
 

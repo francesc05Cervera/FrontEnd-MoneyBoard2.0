@@ -4,7 +4,7 @@ import com.moneyboard.API.UtenteAPI;
 import com.moneyboard.Model.LoginRequest;
 import com.moneyboard.Model.Utente;
 import com.moneyboard.Model.UserSession;
-import com.moneyboard.style.*;
+import com.moneyboard.Style.*;
 
 import javax.swing.*;
 import java.awt.*;

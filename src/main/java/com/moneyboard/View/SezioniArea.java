@@ -5,7 +5,7 @@ import com.moneyboard.Model.DeleteSezioneRequest;
 import com.moneyboard.Model.SezioneRisparmio;
 import com.moneyboard.Model.UserSession;
 import com.moneyboard.Model.Utente;
-import com.moneyboard.style.Style;
+import com.moneyboard.Style.Style;
 import javax.swing.*;
 import java.awt.*;
 

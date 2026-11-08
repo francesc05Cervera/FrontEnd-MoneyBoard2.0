@@ -2,7 +2,7 @@ package com.moneyboard.View;
 
 import com.moneyboard.API.UtenteAPI;
 import com.moneyboard.Model.UserCreateRequest;
-import com.moneyboard.style.Style;
+import com.moneyboard.Style.Style;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.moneyboard.style;
+package com.moneyboard.Style;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
