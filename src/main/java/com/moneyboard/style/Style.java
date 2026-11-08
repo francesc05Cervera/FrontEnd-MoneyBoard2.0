@@ -147,12 +147,7 @@ public final class Style {
 
     public static JButton newStyledButton(String text, Color ignoredForeground, Color requestedColor, int size) {
         JButton button = new JButton(text);
-        Color semantic = requestedColor.getRed() > 170 && requestedColor.getGreen() < 150
-                ? DANGER
-                : requestedColor.getGreen() > requestedColor.getRed() * 1.2
-                    ? SUCCESS
-                    : requestedColor.getRed() > 180 && requestedColor.getGreen() > 120
-                        ? WARNING : PRIMARY;
+        Color semantic = requestedColor;
         button.setFont(new Font("Segoe UI Emoji", Font.BOLD, size));
         button.setForeground(Color.WHITE);
         button.setBackground(semantic);
