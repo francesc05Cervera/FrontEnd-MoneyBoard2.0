@@ -52,7 +52,7 @@ public class AddTransazioneArea extends JFrame {
         GridBagConstraints g=new GridBagConstraints(); g.gridx=0;g.weightx=1;g.fill=GridBagConstraints.HORIZONTAL;g.insets=new Insets(7,10,7,10);
         titoloLabel=Style.fieldLabel("TITOLO"); txtTitolo=new JTextField(); Style.styleField(txtTitolo);
         descrizioneLabel=Style.fieldLabel("DESCRIZIONE"); txtDescrizione=new JTextArea(3,20); Style.styleField(txtDescrizione); txtDescrizione.setLineWrap(true);txtDescrizione.setWrapStyleWord(true);
-        JScrollPane descrizioneScroll=new JScrollPane(txtDescrizione); descrizioneScroll.setBorder(BorderFactory.createLineBorder(Style.BORDER,true)); descrizioneScroll.getViewport().setBackground(Style.SURFACE_ALT);
+        JScrollPane descrizioneScroll=new JScrollPane(txtDescrizione); descrizioneScroll.setBorder(BorderFactory.createLineBorder(Style.BORDER, 1, true)); descrizioneScroll.getViewport().setBackground(Style.SURFACE_ALT);
         importoLabel=Style.fieldLabel("IMPORTO  (€)"); txtImporto=new JTextField(); Style.styleField(txtImporto);
         entrataLabel=Style.fieldLabel("TIPO DI MOVIMENTO"); entrataCheck=new JCheckBox("  È un'entrata"); entrataCheck.setForeground(Style.SUCCESS);entrataCheck.setBackground(Style.SURFACE);entrataCheck.setFont(Style.REGULAR);
         dataLabel=Style.fieldLabel("DATA"); txtData=new JTextField(LocalDate.now().toString()); Style.styleField(txtData); txtData.setEditable(false);txtData.setForeground(Style.MUTED);
@@ -66,7 +66,7 @@ public class AddTransazioneArea extends JFrame {
         GridBagConstraints cg=new GridBagConstraints();cg.gridx=0;cg.gridy=0;cg.weightx=1;cg.fill=GridBagConstraints.HORIZONTAL;cg.insets=new Insets(15,0,15,0);
         center.add(formPanel,cg);mainPanel.add(center,BorderLayout.CENTER);
 
-        buttonPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,0));buttonPanel.setOpaque(false);
+        buttonPanel=new JPanel(new GridLayout(1,2,12,0));buttonPanel.setOpaque(false);
         aggiungiBtn=Style.newStyledButton("Salva movimento  →",Color.WHITE,Style.SUCCESS,14);aggiungiBtn.addActionListener(e->actionAggiungi());
         annullaBtn=Style.newStyledButton("Annulla",Color.WHITE,new Color(49,60,86),14);annullaBtn.addActionListener(e->actionAnnulla());
         buttonPanel.add(annullaBtn);buttonPanel.add(aggiungiBtn);mainPanel.add(buttonPanel,BorderLayout.SOUTH);
