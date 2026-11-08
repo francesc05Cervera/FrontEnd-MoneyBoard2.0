@@ -214,32 +214,33 @@ public class SezioniArea extends JFrame {
         tag.setForeground(Style.MUTED);
         topLine.add(symbol, BorderLayout.WEST);
         topLine.add(tag, BorderLayout.EAST);
-        JPanel details = new JPanel();
+        JPanel details = new JPanel(new BorderLayout());
         details.setOpaque(false);
-        details.setLayout(new BoxLayout(details, BoxLayout.Y_AXIS));
         JLabel name = new JLabel(sezione.getNome());
         name.setFont(new Font("Segoe UI", Font.BOLD, 16));
         name.setForeground(Style.TEXT);
-        name.setAlignmentX(Component.LEFT_ALIGNMENT);
         name.setToolTipText(sezione.getNome());
-        JLabel caption = Style.subtitle("SALDO ATTUALE");
-        caption.setFont(new Font("Segoe UI", Font.BOLD, 10));
-        caption.setAlignmentX(Component.LEFT_ALIGNMENT);
-        JLabel balance = new JLabel(sezione.getSaldo() + " €");
-        balance.setFont(new Font("Segoe UI", Font.BOLD, 23));
+
+        // Il saldo è nel footer della card: resta visibile anche quando
+        // il layout della griglia riduce lo spazio verticale del contenuto.
+        Double saldo = sezione.getSaldo();
+        String saldoText = saldo == null ? "—" : String.format(java.util.Locale.ITALY, "%,.2f €", saldo);
+        JLabel balance = new JLabel(saldoText);
+        balance.setFont(new Font("Segoe UI", Font.BOLD, 22));
         balance.setForeground(Style.SUCCESS);
-        balance.setAlignmentX(Component.LEFT_ALIGNMENT);
-        details.add(name);
-        details.add(Box.createVerticalStrut(12));
-        details.add(caption);
-        details.add(Box.createVerticalStrut(4));
-        details.add(balance);
-        JLabel hint = new JLabel("Clicca per selezionare  →");
+
+        JLabel hint = new JLabel("Seleziona  →");
         hint.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         hint.setForeground(Style.MUTED);
+
+        details.add(name, BorderLayout.NORTH);
+        JPanel cardFooter = new JPanel(new BorderLayout(8, 0));
+        cardFooter.setOpaque(false);
+        cardFooter.add(balance, BorderLayout.WEST);
+        cardFooter.add(hint, BorderLayout.EAST);
         card.add(topLine, BorderLayout.NORTH);
         card.add(details, BorderLayout.CENTER);
-        card.add(hint, BorderLayout.SOUTH);
+        card.add(cardFooter, BorderLayout.SOUTH);
         java.awt.event.MouseAdapter selector = new java.awt.event.MouseAdapter() {
             @Override public void mouseClicked(java.awt.event.MouseEvent e) { selectSezione(index); }
             @Override public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -255,8 +256,8 @@ public class SezioniArea extends JFrame {
         };
         card.addMouseListener(selector);
         topLine.addMouseListener(selector); symbol.addMouseListener(selector); tag.addMouseListener(selector);
-        details.addMouseListener(selector); name.addMouseListener(selector); caption.addMouseListener(selector);
-        balance.addMouseListener(selector); hint.addMouseListener(selector);
+        details.addMouseListener(selector); name.addMouseListener(selector); balance.addMouseListener(selector);
+        cardFooter.addMouseListener(selector); hint.addMouseListener(selector);
         return card;
     }
 
