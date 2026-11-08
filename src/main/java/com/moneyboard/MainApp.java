@@ -2,7 +2,7 @@ package com.moneyboard;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import com.moneyboard.Style.Style;
+import com.moneyboard.style.Style;
 import com.moneyboard.View.LogInArea;
 
 public class MainApp extends JFrame {
