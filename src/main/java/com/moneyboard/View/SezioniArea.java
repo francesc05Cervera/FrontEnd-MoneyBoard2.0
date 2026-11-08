@@ -44,7 +44,7 @@ public class SezioniArea extends JFrame {
         JLabel eyebrow=Style.subtitle("IL TUO SPAZIO FINANZIARIO  /  OVERVIEW");
         JLabel title=Style.heading("Panoramica");
         titleBox.add(eyebrow); titleBox.add(Box.createVerticalStrut(7)); titleBox.add(title);
-        refreshBtn=Style.newStyledButton("Aggiorna  ↻",Color.WHITE,new Color(36, 139, 190),13);
+        refreshBtn=Style.newStyledButton("Aggiorna  ↻",Color.WHITE,new Color(205, 139, 45),13);
         refreshBtn.addActionListener(e->actionRefreshBtn());
 
         logoutBtn = Style.newStyledButton("Esci  ⏻", Color.WHITE, new Color(210, 55, 75), 13);
