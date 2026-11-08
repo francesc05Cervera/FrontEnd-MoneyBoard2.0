@@ -153,7 +153,7 @@ public final class Style {
                     ? SUCCESS
                     : requestedColor.getRed() > 180 && requestedColor.getGreen() > 120
                         ? WARNING : PRIMARY;
-        button.setFont(new Font("Segoe UI", Font.BOLD, size));
+        button.setFont(new Font("Segoe UI Emoji", Font.BOLD, size));
         button.setForeground(Color.WHITE);
         button.setBackground(semantic);
         button.setFocusPainted(false);
