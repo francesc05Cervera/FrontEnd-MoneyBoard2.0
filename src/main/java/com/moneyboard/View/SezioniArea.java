@@ -156,7 +156,7 @@ public class SezioniArea extends JFrame {
         try {
             SezioneRisparmio[] sezioni = sezioneAPI.getSezioni();
 
-            SwingUtilities.invokeLater(() -> updateTable(sezioni));
+            SwingUtilities.invokeLater(() -> updateCards(sezioni));
 
         } catch (Exception ex) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(
@@ -170,7 +170,7 @@ public class SezioniArea extends JFrame {
         }
     }
 
-    private void updateTable(SezioneRisparmio[] sezioni) {
+    private void updateCards(SezioneRisparmio[] sezioni) {
         this.sezioniCorrenti = sezioni;
         selectedSezioneIndex = -1;
         cardsPanel.removeAll();
@@ -322,7 +322,7 @@ public class SezioniArea extends JFrame {
     private void actionEliminaSezione() {
         int selectedRow = selectedSezioneIndex;
 
-        if (selectedRow == -1) {
+        if (selectedRow == -1 || sezioniCorrenti == null || selectedRow >= sezioniCorrenti.length) {
             JOptionPane.showMessageDialog(
                     this,
                     "Seleziona una sezione da eliminare.",
